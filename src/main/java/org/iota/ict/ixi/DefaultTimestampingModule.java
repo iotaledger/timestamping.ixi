@@ -23,17 +23,45 @@ public class DefaultTimestampingModule extends IxiModule {
     @Override
     public void run() { ; }
 
-    public Interval getTimestampInterval(String hash) {
+    private Interval getTimestampInterval(String hash) {
+
         Set<String> p = getPast(hash);
-        return null;
+        Set<String> f = getFuture(hash, p);
+
+        List<Long> timestampsOfPast = getTimestampsOfPast(p);
+        List<Long> timestampsOfFuture = getTimestampsOfFuture(f);
+
+        long av = percentile(timestampsOfPast,30);
+        long bv = percentile(timestampsOfFuture,30);
+
+        return new Interval(av, bv);
+
     }
 
-    private boolean isReferencing(String successor, String predecessor) {
-        Set<String> ret = new HashSet<>();
-        traverseApproved(successor, ret);
-        if(ret.contains(predecessor))
-            return true;
-        return false;
+    private List<Long> getTimestampsOfPast(Set<String> past) {
+        List<Long> ret = new ArrayList<>();
+        for(String hash: past) {
+            Transaction transaction = transactionsByHash.get(hash);
+            long timestamp = transaction.attachmentTimestampLowerBound;
+            ret.add(timestamp);
+        }
+        return ret;
+    }
+
+    private List<Long> getTimestampsOfFuture(Set<String> future) {
+        List<Long> ret = new ArrayList<>();
+        for(String hash: future) {
+            Transaction transaction = transactionsByHash.get(hash);
+            long timestamp = transaction.attachmentTimestampUpperBound;
+            ret.add(timestamp);
+        }
+        return ret;
+    }
+
+    private long percentile(List<Long> list, double percentile) {
+        Collections.sort(list);
+        int index = (int) Math.ceil(( percentile / 100) * list.size());
+        return list.get(index-1);
     }
 
     private Set<String> getPast(String transactionHash) {
@@ -50,6 +78,22 @@ public class DefaultTimestampingModule extends IxiModule {
             if(!isReferencing(successor, transactionHash))
                 ret.remove(successor);
         return ret;
+    }
+
+    private Set<String> getIndependent(String transactionHash, Set<String> past, Set<String> future) {
+        Set<String> ret = new HashSet<>(transactionsByHash.keySet());
+        ret.remove(transactionHash);
+        ret.removeAll(past);
+        ret.removeAll(future);
+        return ret;
+    }
+
+    private boolean isReferencing(String successor, String predecessor) {
+        Set<String> ret = new HashSet<>();
+        traverseApproved(successor, ret);
+        if(ret.contains(predecessor))
+            return true;
+        return false;
     }
 
     private void traverseApproved(String transactionHash, Set<String> ret) {
