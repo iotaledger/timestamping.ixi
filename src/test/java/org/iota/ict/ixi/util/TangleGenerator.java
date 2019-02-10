@@ -9,7 +9,7 @@ public class TangleGenerator {
 
     public static Map<String, Transaction> generate(int size) {
 
-        Map<String, Transaction> tangle = new HashMap<>();
+        LinkedHashMap<String, Transaction> tangle = new LinkedHashMap<>();
 
         Transaction genesis = new TransactionBuilder().build();
         tangle.put(genesis.hash, genesis);
@@ -29,27 +29,32 @@ public class TangleGenerator {
 
     }
 
-    private static String[] getTransactionsToApprove(Map<String, Transaction> tangle) {
+    public static String[] getTransactionsToApprove(Map<String, Transaction> tangle) {
 
         List<Transaction> tips = findTips(tangle);
 
-        List<String> candidates = new ArrayList<>();
+        Set<String> candidates = new HashSet<>();
         for(Transaction t: tips) {
             candidates.add(t.hash);
             candidates.add(t.trunkHash());
             candidates.add(t.branchHash());
         }
 
+        candidates.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+
         String[] ret = new String[2];
 
-        String tip1 = candidates.get(new Random().nextInt(candidates.size()));
-        candidates.remove(tip1);
+        List<String> list = new ArrayList(candidates);
+        Collections.shuffle(list) ;
+
+        String tip1 = list.get(0);
+        list.remove(tip1);
 
         String tip2;
-        if(candidates.size() == 0)
+        if(list.size() == 0)
             tip2 = tip1;
         else
-            tip2 = candidates.get(new Random().nextInt(candidates.size()));
+            tip2 = list.get(0);
 
         ret[0] = tip1;
         ret[1] = tip2;
@@ -58,7 +63,7 @@ public class TangleGenerator {
 
     }
 
-    private static List<Transaction> findTips(Map<String, Transaction> tangle) {
+    public static List<Transaction> findTips(Map<String, Transaction> tangle) {
 
         List<Transaction> tips = new ArrayList<>();
 
