@@ -25,20 +25,24 @@ public class DefaultTimestampingModule extends IxiModule {
 
     private Interval getTimestampInterval(String hash) {
 
-        Set<String> p = getPast(hash);
-        Set<String> f = getFuture(hash, p);
+        Map<String, Transaction> tangle = new HashMap<>(transactionsByHash);
+        double beta = 0.3;
 
-        List<Long> timestampsOfPast = getTimestampsOfPast(p);
-        List<Long> timestampsOfFuture = getTimestampsOfFuture(f);
+        Set<String> past = getPast(hash, tangle);
+        Set<String> future = getFuture(hash, past, tangle);
+        Set<String> independent = getIndependent(hash, past, future);
 
-        long av = percentile(timestampsOfPast,30);
-        long bv = percentile(timestampsOfFuture,30);
+        List<Long> lowerBounds = getLowerBounds(independent);
+        List<Long> upperBounds = getUpperBounds(independent);
+
+        long av = percentile(lowerBounds,beta * 100);
+        long bv = percentile(upperBounds,(1 - beta) * 100);
 
         return new Interval(av, bv);
 
     }
 
-    private List<Long> getTimestampsOfPast(Set<String> past) {
+    private List<Long> getLowerBounds(Set<String> past) {
         List<Long> ret = new ArrayList<>();
         for(String hash: past) {
             Transaction transaction = transactionsByHash.get(hash);
@@ -48,7 +52,7 @@ public class DefaultTimestampingModule extends IxiModule {
         return ret;
     }
 
-    private List<Long> getTimestampsOfFuture(Set<String> future) {
+    private List<Long> getUpperBounds(Set<String> future) {
         List<Long> ret = new ArrayList<>();
         for(String hash: future) {
             Transaction transaction = transactionsByHash.get(hash);
@@ -64,18 +68,18 @@ public class DefaultTimestampingModule extends IxiModule {
         return list.get(index-1);
     }
 
-    private Set<String> getPast(String transactionHash) {
+    private Set<String> getPast(String transactionHash, Map<String, Transaction> tangle) {
         Set<String> ret = new HashSet<>();
-        traverseApproved(transactionHash, ret);
+        traverseApproved(transactionHash, ret, tangle);
         return ret;
     }
 
-    private Set<String> getFuture(String transactionHash, Set<String> past) {
-        Set<String> ret = new HashSet<>(transactionsByHash.keySet());
+    private Set<String> getFuture(String transactionHash, Set<String> past, Map<String, Transaction> tangle) {
+        Set<String> ret = new HashSet<>(tangle.keySet());
         ret.remove(transactionHash);
         ret.removeAll(past);
         for(String successor: new HashSet<>(ret))
-            if(!isReferencing(successor, transactionHash))
+            if(!isReferencing(successor, transactionHash, tangle))
                 ret.remove(successor);
         return ret;
     }
@@ -88,17 +92,17 @@ public class DefaultTimestampingModule extends IxiModule {
         return ret;
     }
 
-    private boolean isReferencing(String successor, String predecessor) {
+    private boolean isReferencing(String successor, String predecessor, Map<String, Transaction> tangle) {
         Set<String> ret = new HashSet<>();
-        traverseApproved(successor, ret);
+        traverseApproved(successor, ret, tangle);
         if(ret.contains(predecessor))
             return true;
         return false;
     }
 
-    private void traverseApproved(String transactionHash, Set<String> ret) {
+    private void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {
 
-        String[] approved = getApproved(transactionHash);
+        String[] approved = getApproves(transactionHash, tangle);
 
         if(approved == null)
             return;
@@ -109,13 +113,13 @@ public class DefaultTimestampingModule extends IxiModule {
         ret.add(trunk);
         ret.add(branch);
 
-        traverseApproved(trunk, ret);
-        traverseApproved(branch, ret);
+        traverseApproved(trunk, ret, tangle);
+        traverseApproved(branch, ret, tangle);
 
     }
 
-    private String[] getApproved(String transactionHash) {
-        Transaction transaction = transactionsByHash.get(transactionHash);
+    private String[] getApproves(String transactionHash, Map<String, Transaction> tangle) {
+        Transaction transaction = tangle.get(transactionHash);
         if(transaction == null)
             return null;
         return new String[] { transaction.trunkHash(), transaction.branchHash() };

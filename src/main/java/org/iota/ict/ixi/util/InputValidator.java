@@ -1,8 +1,5 @@
 package org.iota.ict.ixi.util;
 
-import org.iota.ict.model.Transaction;
-import org.iota.ict.utils.Trytes;
-
 public class InputValidator {
 
     public static boolean isValidHash(String hash) {
