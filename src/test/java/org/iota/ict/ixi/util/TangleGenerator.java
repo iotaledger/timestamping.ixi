@@ -3,13 +3,17 @@ package org.iota.ict.ixi.util;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 
+import java.security.SecureRandom;
 import java.util.*;
 
 public class TangleGenerator {
 
-    public static Map<String, Transaction> generate(int size) {
+    private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
+    private static SecureRandom r = new SecureRandom();
 
-        LinkedHashMap<String, Transaction> tangle = new LinkedHashMap<>();
+    public static Map<String, Transaction> createTangle(int size) {
+
+        Map<String, Transaction> tangle = new HashMap<>();
 
         Transaction genesis = new TransactionBuilder().build();
         tangle.put(genesis.hash, genesis);
@@ -45,7 +49,7 @@ public class TangleGenerator {
         String[] ret = new String[2];
 
         List<String> list = new ArrayList(candidates);
-        Collections.shuffle(list) ;
+        Collections.shuffle(list);
 
         String tip1 = list.get(0);
         list.remove(tip1);
@@ -89,6 +93,13 @@ public class TangleGenerator {
 
         return tips;
 
+    }
+
+    public static String getRandomHash(){
+        StringBuilder sb = new StringBuilder(81);
+        for( int i = 0; i < 81; i++ )
+            sb.append( alphabet.charAt( r.nextInt(alphabet.length()) ) );
+        return sb.toString();
     }
 
 }

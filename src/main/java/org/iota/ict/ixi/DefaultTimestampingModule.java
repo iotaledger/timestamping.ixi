@@ -100,7 +100,7 @@ public class DefaultTimestampingModule extends IxiModule {
         return false;
     }
 
-    private void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {
+    public void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {
 
         String[] approved = getApproves(transactionHash, tangle);
 
@@ -118,7 +118,7 @@ public class DefaultTimestampingModule extends IxiModule {
 
     }
 
-    private String[] getApproves(String transactionHash, Map<String, Transaction> tangle) {
+    public String[] getApproves(String transactionHash, Map<String, Transaction> tangle) {
         Transaction transaction = tangle.get(transactionHash);
         if(transaction == null)
             return null;
