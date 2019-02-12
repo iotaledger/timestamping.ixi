@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TraverseApprovedTest extends ModuleTestTemplate {
+public class GetPastTest extends ModuleTestTemplate {
 
     @Test
     public void testTraverseApproved() {
@@ -58,9 +58,7 @@ public class TraverseApprovedTest extends ModuleTestTemplate {
         tangle.put(t5.hash, t5);
 
 
-        Set<String> confirmed = new HashSet<>();
-        timestampingModule.traverseApproved(t3.hash, confirmed, tangle);
-
+        Set<String> confirmed = timestampingModule.getPast(t3.hash, tangle);
         confirmed.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
 
         Assert.assertEquals(3, confirmed.size());

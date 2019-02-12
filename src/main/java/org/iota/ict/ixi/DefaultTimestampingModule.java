@@ -1,6 +1,7 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
+import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.model.Transaction;
 
 import java.util.*;
@@ -30,10 +31,10 @@ public class DefaultTimestampingModule extends IxiModule {
 
         Set<String> past = getPast(hash, tangle);
         Set<String> future = getFuture(hash, past, tangle);
-        Set<String> independent = getIndependent(hash, past, future);
+        Set<String> independent = getIndependent(hash, past, future, tangle);
 
-        List<Long> lowerBounds = getLowerBounds(independent);
-        List<Long> upperBounds = getUpperBounds(independent);
+        List<Long> lowerBounds = getTimestamps(independent, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
+        List<Long> upperBounds = getTimestamps(independent, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
 
         long av = percentile(lowerBounds,beta * 100);
         long bv = percentile(upperBounds,(1 - beta) * 100);
@@ -42,23 +43,28 @@ public class DefaultTimestampingModule extends IxiModule {
 
     }
 
-    private List<Long> getLowerBounds(Set<String> past) {
+    public List<Long> getTimestamps(Set<String> set, TimestampType timestampType, Map<String, Transaction> tangle) {
         List<Long> ret = new ArrayList<>();
-        for(String hash: past) {
-            Transaction transaction = transactionsByHash.get(hash);
-            long timestamp = transaction.attachmentTimestampLowerBound;
-            ret.add(timestamp);
+        for(String hash: set) {
+            Transaction transaction = tangle.get(hash);
+            if(transaction == null)
+                continue;
+            switch (timestampType) {
+                case ATTACHMENT_TIMESTAMP_LOWERBOUND: {
+                    ret.add(transaction.attachmentTimestampLowerBound);
+                    break;
+                }
+                case ATTACHMENT_TIMESTAMP: {
+                    ret.add(transaction.attachmentTimestamp);
+                    break;
+                }
+                case ATTACHMENT_TIMESTAMP_UPPERBOUND: {
+                    ret.add(transaction.attachmentTimestampUpperBound);
+                    break;
+                }
+            }
         }
-        return ret;
-    }
-
-    private List<Long> getUpperBounds(Set<String> future) {
-        List<Long> ret = new ArrayList<>();
-        for(String hash: future) {
-            Transaction transaction = transactionsByHash.get(hash);
-            long timestamp = transaction.attachmentTimestampUpperBound;
-            ret.add(timestamp);
-        }
+        Collections.sort(ret);
         return ret;
     }
 
@@ -68,13 +74,13 @@ public class DefaultTimestampingModule extends IxiModule {
         return list.get(index-1);
     }
 
-    private Set<String> getPast(String transactionHash, Map<String, Transaction> tangle) {
+    public Set<String> getPast(String transactionHash, Map<String, Transaction> tangle) {
         Set<String> ret = new HashSet<>();
         traverseApproved(transactionHash, ret, tangle);
         return ret;
     }
 
-    private Set<String> getFuture(String transactionHash, Set<String> past, Map<String, Transaction> tangle) {
+    public Set<String> getFuture(String transactionHash, Set<String> past, Map<String, Transaction> tangle) {
         Set<String> ret = new HashSet<>(tangle.keySet());
         ret.remove(transactionHash);
         ret.removeAll(past);
@@ -84,23 +90,22 @@ public class DefaultTimestampingModule extends IxiModule {
         return ret;
     }
 
-    private Set<String> getIndependent(String transactionHash, Set<String> past, Set<String> future) {
-        Set<String> ret = new HashSet<>(transactionsByHash.keySet());
+    public Set<String> getIndependent(String transactionHash, Set<String> past, Set<String> future, Map<String, Transaction> tangle) {
+        Set<String> ret = new HashSet<>(tangle.keySet());
         ret.remove(transactionHash);
         ret.removeAll(past);
         ret.removeAll(future);
         return ret;
     }
 
-    private boolean isReferencing(String successor, String predecessor, Map<String, Transaction> tangle) {
-        Set<String> ret = new HashSet<>();
-        traverseApproved(successor, ret, tangle);
-        if(ret.contains(predecessor))
+    public boolean isReferencing(String successor, String predecessor, Map<String, Transaction> tangle) {
+        Set<String> past = getPast(successor, tangle);
+        if(past.contains(predecessor))
             return true;
         return false;
     }
 
-    public void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {
+    private void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {
 
         String[] approved = getApproves(transactionHash, tangle);
 
