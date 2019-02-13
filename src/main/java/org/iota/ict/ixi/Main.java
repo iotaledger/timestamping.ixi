@@ -12,7 +12,7 @@ public class Main {
 
         Properties properties = new Properties();
         Ict ict = new Ict(properties.toFinal());
-        new Thread(new DefaultTimestampingModule(ict)).start();
+        new QuantileTimestampingModule(ict).run();
 
     }
 

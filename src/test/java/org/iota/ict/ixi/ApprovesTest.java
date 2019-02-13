@@ -14,10 +14,10 @@ public class ApprovesTest extends ModuleTestTemplate {
     @Test
     public void testFindApproves() {
 
-        List<Transaction> tips = TangleGenerator.findTips(tangle);
+        String[] tips = TangleGenerator.getTransactionsToApprove(tangle);
 
-        String trunk = tips.get(0).hash;
-        String branch = tips.get(1).hash;
+        String trunk = tips[0];
+        String branch = tips[1];
 
         TransactionBuilder builder = new TransactionBuilder();
         builder.trunkHash = trunk;

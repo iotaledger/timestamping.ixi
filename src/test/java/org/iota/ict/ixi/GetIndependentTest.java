@@ -60,12 +60,12 @@ public class GetIndependentTest extends ModuleTestTemplate {
 
         Set<String> past = timestampingModule.getPast(t2.hash, tangle);
         Set<String> future = timestampingModule.getFuture(t2.hash, past, tangle);
-        Set<String> independent = timestampingModule.getIndependent(t2.hash, past, future, tangle);
+        Set<String> independent = timestampingModule.getIndependent(past, future, tangle);
 
-        Assert.assertEquals(5, independent.size());
+        Assert.assertEquals(6, independent.size());
         Assert.assertEquals(false, independent.contains(genesis.hash));
         Assert.assertEquals(false, independent.contains(t1.hash));
-        Assert.assertEquals(false, independent.contains(t2.hash));
+        Assert.assertEquals(true, independent.contains(t2.hash));
         Assert.assertEquals(false, independent.contains(t3.hash));
         Assert.assertEquals(false, independent.contains(t4.hash));
 

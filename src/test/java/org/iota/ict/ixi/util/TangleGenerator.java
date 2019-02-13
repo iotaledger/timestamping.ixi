@@ -18,18 +18,27 @@ public class TangleGenerator {
         Transaction genesis = new TransactionBuilder().build();
         tangle.put(genesis.hash, genesis);
 
+        continueTangle(tangle, size);
+
+        return tangle;
+
+    }
+
+    public static void continueTangle(Map<String, Transaction> tangle, int size) {
+
         for(int i = 0; i < size; i++) {
 
             TransactionBuilder builder = new TransactionBuilder();
             String[] tips = getTransactionsToApprove(tangle);
             builder.trunkHash = tips[0];
             builder.branchHash = tips[1];
+            builder.attachmentTimestampLowerBound = System.currentTimeMillis();
+            builder.attachmentTimestamp = System.currentTimeMillis();
+            builder.attachmentTimestampUpperBound = System.currentTimeMillis();
             Transaction transaction = builder.build();
             tangle.put(transaction.hash, transaction);
 
         }
-
-        return tangle;
 
     }
 
