@@ -2,13 +2,15 @@ package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.TimestampType;
+import org.iota.ict.ixi.model.TimestampingCalculation;
 import org.iota.ict.model.Transaction;
 
 import java.util.*;
 
 public abstract class AbstractTimestampingModule extends IxiModule {
 
-    protected Map<String, Transaction> transactionsByHash = new HashMap<>();
+    protected Map<String, TimestampingCalculation> calculations = new HashMap<>();
+    protected Map<String, Transaction> tangle = new HashMap<>();
 
     protected AbstractTimestampingModule(Ixi ixi) {
 
@@ -16,7 +18,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
 
         ixi.addGossipListener(event -> {
             Transaction transaction = event.getTransaction();
-            transactionsByHash.put(transaction.hash, transaction);
+            tangle.put(transaction.hash, transaction);
         });
 
     }
