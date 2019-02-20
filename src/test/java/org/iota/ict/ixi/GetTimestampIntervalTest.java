@@ -1,7 +1,9 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
+import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -9,7 +11,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class GetTimestampIntervalTest extends ModuleTestTemplate {
+public class GetTimestampIntervalTest extends QuantileTimestampingTestTemplate {
 
     @Test
     public void getTimestampIntervalTest() {
@@ -41,9 +43,9 @@ public class GetTimestampIntervalTest extends ModuleTestTemplate {
 
         TangleGenerator.continueTangle(tangle,100);
 
-        Interval time1 = timestampingModule.getTimestampInterval(timestampingModule.beginTimestampCalculation(t1.hash, 0.3), tangle);
-        Interval time2 = timestampingModule.getTimestampInterval(timestampingModule.beginTimestampCalculation(t2.hash, 0.3), tangle);
-        Interval time3 = timestampingModule.getTimestampInterval(timestampingModule.beginTimestampCalculation(t3.hash, 0.3), tangle);
+        Interval time1 = quantileTimestampingModule.getTimestampInterval(quantileTimestampingModule.beginTimestampCalculation(t1.hash, 0.3), tangle);
+        Interval time2 = quantileTimestampingModule.getTimestampInterval(quantileTimestampingModule.beginTimestampCalculation(t2.hash, 0.3), tangle);
+        Interval time3 = quantileTimestampingModule.getTimestampInterval(quantileTimestampingModule.beginTimestampCalculation(t3.hash, 0.3), tangle);
 
     }
 

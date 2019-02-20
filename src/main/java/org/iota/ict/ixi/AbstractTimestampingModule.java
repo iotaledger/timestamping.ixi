@@ -12,7 +12,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
     protected Map<String, TimestampingCalculation> calculations = new HashMap<>();
     protected Map<String, Transaction> tangle = new HashMap<>();
 
-    protected AbstractTimestampingModule(Ixi ixi) {
+    public AbstractTimestampingModule(Ixi ixi) {
 
         super(ixi);
 

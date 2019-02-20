@@ -1,6 +1,7 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
+import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
@@ -8,7 +9,7 @@ import org.junit.Test;
 
 import java.util.Set;
 
-public class GetFutureTest extends ModuleTestTemplate {
+public class GetFutureTest extends DefaultModuleTestTemplate {
 
     @Test
     public void testGetFuture() {

@@ -1,6 +1,6 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -8,10 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
-public class GetPastTest extends ModuleTestTemplate {
+public class GetPastTest extends DefaultModuleTestTemplate {
 
     @Test
     public void testTraverseApproved() {

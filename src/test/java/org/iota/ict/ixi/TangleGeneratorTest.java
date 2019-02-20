@@ -1,6 +1,6 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TangleGeneratorTest extends ModuleTestTemplate {
+public class TangleGeneratorTest extends DefaultModuleTestTemplate {
 
     @Test
     public void testFindTips() {

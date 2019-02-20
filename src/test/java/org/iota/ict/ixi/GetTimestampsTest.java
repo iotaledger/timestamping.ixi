@@ -1,7 +1,7 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.TimestampType;
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class GetTimestampsTest extends ModuleTestTemplate {
+public class GetTimestampsTest extends DefaultModuleTestTemplate {
 
     @Test
     public void testGetTimestamps() {

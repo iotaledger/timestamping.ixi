@@ -1,15 +1,14 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
+import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
-
-public class ApprovesTest extends ModuleTestTemplate {
+public class ApprovesTest extends DefaultModuleTestTemplate {
 
     @Test
     public void testFindApproves() {

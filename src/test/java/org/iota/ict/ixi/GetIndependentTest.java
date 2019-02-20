@@ -1,6 +1,7 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.ModuleTestTemplate;
+import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
+import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -10,7 +11,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Set;
 
-public class GetIndependentTest extends ModuleTestTemplate {
+public class GetIndependentTest extends DefaultModuleTestTemplate {
 
     @Test
     public void getIndependentTest() {
