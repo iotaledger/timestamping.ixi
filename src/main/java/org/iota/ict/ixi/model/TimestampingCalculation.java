@@ -7,7 +7,7 @@ public abstract class TimestampingCalculation {
 
     private String txToInspect;
     private Set<String> helper = new HashSet<>();
-    private Interval interval;
+    private Interval result;
 
     public TimestampingCalculation(String txToInspect) {
         this.txToInspect = txToInspect;
@@ -22,12 +22,12 @@ public abstract class TimestampingCalculation {
         return txToInspect;
     }
 
-    public void setInterval(Interval interval){
-        this.interval = interval;
+    public void setResult(Interval result){
+        this.result = result;
     }
 
-    public Interval getInterval(){
-        return interval;
+    public Interval getResult(){
+        return result;
     }
 
 }

@@ -41,9 +41,9 @@ public class GetTimestampIntervalTest extends ModuleTestTemplate {
 
         TangleGenerator.continueTangle(tangle,100);
 
-        Interval time1 = timestampingModule.getTimestampInterval(t1.hash, tangle);
-        Interval time2 = timestampingModule.getTimestampInterval(t2.hash, tangle);
-        Interval time3 = timestampingModule.getTimestampInterval(t3.hash, tangle);
+        Interval time1 = timestampingModule.getTimestampInterval(timestampingModule.beginTimestampCalculation(t1.hash, 0.3), tangle);
+        Interval time2 = timestampingModule.getTimestampInterval(timestampingModule.beginTimestampCalculation(t2.hash, 0.3), tangle);
+        Interval time3 = timestampingModule.getTimestampInterval(timestampingModule.beginTimestampCalculation(t3.hash, 0.3), tangle);
 
     }
 

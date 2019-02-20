@@ -26,7 +26,22 @@ public abstract class AbstractTimestampingModule extends IxiModule {
     @Override
     public void run() { ; }
 
-    protected abstract Interval getTimestampInterval(String hash, Map<String, Transaction> tangle);
+    public abstract String beginTimestampCalculation(String txToInspect, Object... args);
+
+    public void addTimestampHelper(String identifier, String referringTx) {
+        TimestampingCalculation calculation = calculations.get(identifier);
+        calculation.addTimestampHelper(referringTx);
+    }
+
+    public void addTimestampHelper(String identifier, String[] referringTx) {
+        TimestampingCalculation calculation = calculations.get(identifier);
+        for(String hash: referringTx)
+            calculation.addTimestampHelper(referringTx);
+    }
+
+    public abstract Interval getTimestampInterval(String hash, Map<String, Transaction> tangle);
+
+    public abstract double getTimestampConfidence(String identifier);
 
     public static List<Long> getTimestamps(Set<String> set, TimestampType timestampType, Map<String, Transaction> tangle) {
         List<Long> ret = new ArrayList<>();
@@ -87,6 +102,24 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         if(transaction == null)
             return null;
         return new String[] { transaction.trunkHash(), transaction.branchHash() };
+    }
+
+    public static Set<String> getApprovers(String txToInspect, Set<String> future, Map<String, Transaction> tangle) {
+
+        Set<String> approvers = new HashSet<>();
+
+        for(String hash: future) {
+
+            String[] approves = getApproves(hash, tangle);
+
+            if(approves == null)
+                continue;
+
+            if(approves[0].equals(txToInspect) || approves[1].equals(txToInspect))
+                approvers.add(hash);
+        }
+
+        return approvers;
     }
 
     private static void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {

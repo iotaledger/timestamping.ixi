@@ -16,21 +16,12 @@ public class QuantileTimestampingModule extends AbstractTimestampingModule {
         super(ixi);
     }
 
-    public String beginTimestampCalculation(String txToInspect, double beta) {
+    @Override
+    public String beginTimestampCalculation(String txToInspect, Object... args) {
         String identifier = Generator.getRandomHash();
+        double beta = (double) args[0];
         calculations.put(identifier, new QuantileTimestampingCalculation(txToInspect, beta));
         return identifier;
-    }
-
-    public void addTimestampHelper(String identifier, String referringTx) {
-        QuantileTimestampingCalculation calculation = calculations.get(identifier);
-        calculation.addTimestampHelper(referringTx);
-    }
-
-    public void addTimestampHelper(String identifier, String[] referringTx) {
-        QuantileTimestampingCalculation calculation = calculations.get(identifier);
-        for(String hash: referringTx)
-            calculation.addTimestampHelper(referringTx);
     }
 
     @Override
@@ -50,8 +41,8 @@ public class QuantileTimestampingModule extends AbstractTimestampingModule {
         long av = percentile(lowerBounds,beta * 100);
         long bv = percentile(upperBounds,(1 - beta) * 100);
 
-        calculation.setInterval(new Interval(av, bv));
-        return calculation.getInterval();
+        calculation.setResult(new Interval(av, bv));
+        return calculation.getResult();
 
     }
 
@@ -61,6 +52,7 @@ public class QuantileTimestampingModule extends AbstractTimestampingModule {
         return list.get(index-1);
     }
 
+    @Override
     public double getTimestampConfidence(String identifier) {
         QuantileTimestampingCalculation calculation = calculations.get(identifier);
         double beta = calculation.getBeta();
