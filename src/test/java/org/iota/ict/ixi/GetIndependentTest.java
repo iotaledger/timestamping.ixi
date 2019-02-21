@@ -1,7 +1,6 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
-import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -11,7 +10,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Set;
 
-public class GetIndependentTest extends DefaultModuleTestTemplate {
+public class GetIndependentTest extends AbstractModuleTestTemplate {
 
     @Test
     public void getIndependentTest() {
@@ -59,9 +58,9 @@ public class GetIndependentTest extends DefaultModuleTestTemplate {
             tangle.put(t.hash, t);
         }
 
-        Set<String> past = timestampingModule.getPast(t2.hash, tangle);
-        Set<String> future = timestampingModule.getFuture(t2.hash, past, tangle);
-        Set<String> independent = timestampingModule.getIndependent(past, future, tangle);
+        Set<String> past = AbstractTimestampingModule.getPast(t2.hash, tangle);
+        Set<String> future = AbstractTimestampingModule.getFuture(t2.hash, past, tangle);
+        Set<String> independent = AbstractTimestampingModule.getIndependent(past, future, tangle);
 
         Assert.assertEquals(6, independent.size());
         Assert.assertEquals(false, independent.contains(genesis.hash));

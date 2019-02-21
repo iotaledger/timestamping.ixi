@@ -1,7 +1,7 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.TimestampType;
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class GetTimestampsTest extends DefaultModuleTestTemplate {
+public class GetTimestampsTest extends AbstractModuleTestTemplate {
 
     @Test
     public void testGetTimestamps() {
@@ -52,20 +52,20 @@ public class GetTimestampsTest extends DefaultModuleTestTemplate {
         Transaction t3 = tb3.build();
         tangle.put(t3.hash, t3);
 
-        Set<String> set = timestampingModule.getPast(t3.hash, tangle);
+        Set<String> set = AbstractTimestampingModule.getPast(t3.hash, tangle);
 
-        List<Long> lowerbounds = timestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
+        List<Long> lowerbounds = AbstractTimestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
         Assert.assertEquals(3, lowerbounds.size());
         Assert.assertEquals(true, lowerbounds.contains(0l));
         Assert.assertEquals(true, lowerbounds.contains(1l));
         Assert.assertEquals(true, lowerbounds.contains(3l));
 
-        List<Long> normal = timestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP, tangle);
+        List<Long> normal = AbstractTimestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP, tangle);
         Assert.assertEquals(3, normal.size());
         Assert.assertEquals(true, normal.contains(timestamps.get(0)));
         Assert.assertEquals(true, normal.contains(timestamps.get(1)));
 
-        List<Long> upperbounds = timestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
+        List<Long> upperbounds = AbstractTimestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
         Assert.assertEquals(3, upperbounds.size());
         Assert.assertEquals(true, upperbounds.contains(0l));
         Assert.assertEquals(true, upperbounds.contains(3l));

@@ -1,7 +1,6 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
-import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
@@ -9,7 +8,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-public class IsReferencingTest extends DefaultModuleTestTemplate {
+public class IsReferencingTest extends AbstractModuleTestTemplate {
 
     @Test
     public void isReferencingTest() {
@@ -41,7 +40,7 @@ public class IsReferencingTest extends DefaultModuleTestTemplate {
         Transaction t3 = tb3.build();
         tangle.put(t3.hash, t3);
 
-        Assert.assertEquals(true, timestampingModule.isReferencing(t3.hash, genesis.hash, tangle));
+        Assert.assertEquals(true, AbstractTimestampingModule.isReferencing(t3.hash, genesis.hash, tangle));
 
     }
 

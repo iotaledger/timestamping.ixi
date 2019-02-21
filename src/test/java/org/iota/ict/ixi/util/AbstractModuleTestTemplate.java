@@ -1,7 +1,6 @@
 package org.iota.ict.ixi.util;
 
 import org.iota.ict.Ict;
-import org.iota.ict.ixi.AbstractTimestampingModule;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.utils.properties.EditableProperties;
 import org.junit.AfterClass;

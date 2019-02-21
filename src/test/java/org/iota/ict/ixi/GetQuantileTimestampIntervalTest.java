@@ -1,8 +1,6 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
-import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
 import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
@@ -11,7 +9,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class GetTimestampIntervalTest extends QuantileTimestampingTestTemplate {
+public class GetQuantileTimestampIntervalTest extends QuantileTimestampingTestTemplate {
 
     @Test
     public void getTimestampIntervalTest() {

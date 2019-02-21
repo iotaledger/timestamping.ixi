@@ -17,22 +17,24 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
     @Override
     public String beginTimestampCalculation(String txToInspect, Object... args) {
         String identifier = Generator.getRandomHash();
-        calculations.put(identifier, new TipSelectionTimestampingCalculation(txToInspect));
+        String entry = (String) args[0];
+        calculations.put(identifier, new TipSelectionTimestampingCalculation(txToInspect, entry));
         return identifier;
     }
 
     @Override
-    public Interval getTimestampInterval(String txToInspect, Map<String, Transaction> tangle) {
+    public Interval getTimestampInterval(String identifier, Map<String, Transaction> tangle) {
+
+        TipSelectionTimestampingCalculation calculation = (TipSelectionTimestampingCalculation) calculations.get(identifier);
+        String txToInspect = calculation.getTxToInspect();
+        String entry = calculation.getEntry();
 
         Set<String> past = getPast(txToInspect, tangle);
         Set<String> future = getFuture(txToInspect, past, tangle);
-        Map<String, Integer> ratings = calculateRatings(tangle);
+        Set<String> path = getPath(entry, tangle);
 
-        Set<String> walk = new HashSet<>();
-        walk(txToInspect, walk, ratings, tangle);
-
-        past.retainAll(walk);
-        future.retainAll(walk);
+        past.retainAll(path);
+        future.retainAll(path);
 
         Map<String, Long> t_minus = new HashMap<>();
         Map<String, Long> t_plus = new HashMap<>();
@@ -76,7 +78,14 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         return ratings;
     }
 
-    private void walk(String current, Set<String> walk, Map<String, Integer> ratings, Map<String, Transaction> tangle) {
+    public Set<String> getPath(String entry, Map<String, Transaction> tangle) {
+        Map<String, Integer> ratings = calculateRatings(tangle);
+        Set<String> visited = new HashSet<>();
+        walk(entry, visited, ratings, tangle);
+        return visited;
+    }
+
+    private void walk(String current, Set<String> visited, Map<String, Integer> ratings, Map<String, Transaction> tangle) {
 
         Set<String> approvers = getApprovers(current, getFuture(current, getPast(current, tangle), tangle), tangle);
         Map<String, Integer> ratingsOfApprovers = new HashMap<>();
@@ -84,11 +93,14 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
             ratingsOfApprovers.put(approver, ratings.get(approver));
 
         Stream<Map.Entry<String,Integer>> sorted = ratingsOfApprovers.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-        Map.Entry<String,Integer> first = sorted.iterator().next();
-        String tx = first.getKey();
-        walk.add(tx);
+        Iterator<Map.Entry<String, Integer>> i = sorted.iterator();
+        if(!i.hasNext())
+            return;
 
-        walk(tx, walk, ratings, tangle);
+        String tx = i.next().getKey();
+        visited.add(tx);
+
+        walk(tx, visited, ratings, tangle);
 
     }
 

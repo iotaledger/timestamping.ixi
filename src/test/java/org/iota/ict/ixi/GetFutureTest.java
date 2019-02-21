@@ -1,7 +1,6 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
-import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
@@ -9,7 +8,7 @@ import org.junit.Test;
 
 import java.util.Set;
 
-public class GetFutureTest extends DefaultModuleTestTemplate {
+public class GetFutureTest extends AbstractModuleTestTemplate {
 
     @Test
     public void testGetFuture() {
@@ -47,7 +46,7 @@ public class GetFutureTest extends DefaultModuleTestTemplate {
         tangle.put(t4.hash, t4);
 
 
-        Set<String> future = timestampingModule.getFuture(genesis.hash, timestampingModule.getPast(genesis.hash, tangle), tangle);
+        Set<String> future = AbstractTimestampingModule.getFuture(genesis.hash, AbstractTimestampingModule.getPast(genesis.hash, tangle), tangle);
 
         Assert.assertEquals(4, future.size());
         Assert.assertEquals(true, future.contains(t1.hash));

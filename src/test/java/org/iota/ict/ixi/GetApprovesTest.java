@@ -1,14 +1,13 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
-import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ApprovesTest extends DefaultModuleTestTemplate {
+public class GetApprovesTest extends AbstractModuleTestTemplate {
 
     @Test
     public void testFindApproves() {
@@ -25,7 +24,7 @@ public class ApprovesTest extends DefaultModuleTestTemplate {
 
         tangle.put(transaction.hash, transaction);
 
-        String[] approves = timestampingModule.getApproves(transaction.hash, tangle);
+        String[] approves = AbstractTimestampingModule.getApproves(transaction.hash, tangle);
 
         Assert.assertEquals(trunk, approves[0]);
         Assert.assertEquals(branch, approves[1]);

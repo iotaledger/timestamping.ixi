@@ -1,6 +1,6 @@
 package org.iota.ict.ixi;
 
-import org.iota.ict.ixi.util.DefaultModuleTestTemplate;
+import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Set;
 
-public class GetPastTest extends DefaultModuleTestTemplate {
+public class GetPastTest extends AbstractModuleTestTemplate {
 
     @Test
     public void testTraverseApproved() {
@@ -57,7 +57,7 @@ public class GetPastTest extends DefaultModuleTestTemplate {
         tangle.put(t5.hash, t5);
 
 
-        Set<String> confirmed = timestampingModule.getPast(t3.hash, tangle);
+        Set<String> confirmed = AbstractTimestampingModule.getPast(t3.hash, tangle);
         confirmed.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
 
         Assert.assertEquals(3, confirmed.size());
