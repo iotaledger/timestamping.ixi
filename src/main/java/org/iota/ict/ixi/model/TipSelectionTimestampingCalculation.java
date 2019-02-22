@@ -9,7 +9,6 @@ public class TipSelectionTimestampingCalculation extends TimestampingCalculation
         this.entry = entry;
     }
 
-
     public String getEntry() {
         return entry;
     }

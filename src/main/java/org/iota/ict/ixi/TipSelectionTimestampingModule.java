@@ -48,7 +48,7 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         Stream<Map.Entry<String, Long>> t_minus_sorted = t_minus.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
         long av = t_minus_sorted.iterator().next().getValue();
 
-        Stream<Map.Entry<String, Long>> t_plus_sorted = t_minus.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+        Stream<Map.Entry<String, Long>> t_plus_sorted = t_plus.entrySet().stream().sorted(Map.Entry.comparingByValue());
         long bv = t_plus_sorted.iterator().next().getValue();
 
         return new Interval(av, bv);
@@ -101,6 +101,7 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         visited.add(tx);
 
         walk(tx, visited, ratings, tangle);
+
 
     }
 
