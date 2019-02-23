@@ -26,4 +26,9 @@ public class Interval {
         return upperbound;
     }
 
+    @Override
+    public String toString() {
+        return lowerbound + ":" + upperbound;
+    }
+
 }

@@ -14,8 +14,6 @@ public class GetQuantileTimestampIntervalTest extends QuantileTimestampingTestTe
     @Test
     public void getTimestampIntervalTest() {
 
-        tangle = TangleGenerator.createTangle(50);
-
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
         // t1

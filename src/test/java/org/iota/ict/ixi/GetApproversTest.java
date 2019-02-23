@@ -15,8 +15,6 @@ public class GetApproversTest extends AbstractModuleTestTemplate {
     @Test
     public void getApproversTest() {
 
-        tangle = TangleGenerator.createTangle(50);
-
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
         // t1

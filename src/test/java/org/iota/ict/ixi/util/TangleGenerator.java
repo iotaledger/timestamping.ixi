@@ -3,13 +3,9 @@ package org.iota.ict.ixi.util;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 
-import java.security.SecureRandom;
 import java.util.*;
 
 public class TangleGenerator {
-
-    private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
-    private static SecureRandom r = new SecureRandom();
 
     public static LinkedHashMap <String, Transaction> createTangle(int size) {
 
@@ -102,13 +98,6 @@ public class TangleGenerator {
 
         return tips;
 
-    }
-
-    public static String getRandomHash(){
-        StringBuilder sb = new StringBuilder(81);
-        for( int i = 0; i < 81; i++ )
-            sb.append( alphabet.charAt( r.nextInt(alphabet.length()) ) );
-        return sb.toString();
     }
 
 }

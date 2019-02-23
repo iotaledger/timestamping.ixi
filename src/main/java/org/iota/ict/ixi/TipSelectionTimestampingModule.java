@@ -61,9 +61,10 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         return ratings;
     }
 
-    public Set<String> getPath(String entry, Map<String, Transaction> tangle) {
+    public LinkedHashSet<String> getPath(String entry, Map<String, Transaction> tangle) {
         Map<String, Integer> ratings = calculateRatings(tangle);
-        Set<String> visited = new HashSet<>();
+        LinkedHashSet<String> visited = new LinkedHashSet<>();
+        visited.add(entry);
         walk(entry, visited, ratings, tangle);
         return visited;
     }

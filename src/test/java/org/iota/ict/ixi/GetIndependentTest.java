@@ -1,14 +1,12 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
-import org.iota.ict.ixi.util.TangleGenerator;
+import org.iota.ict.ixi.util.Generator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class GetIndependentTest extends AbstractModuleTestTemplate {
@@ -16,7 +14,7 @@ public class GetIndependentTest extends AbstractModuleTestTemplate {
     @Test
     public void getIndependentTest() {
 
-        tangle = new LinkedHashMap<>();
+        tangle.clear();
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();
@@ -53,8 +51,8 @@ public class GetIndependentTest extends AbstractModuleTestTemplate {
         // add 5 independent tx
         for(int i = 0; i < 5; i++) {
             TransactionBuilder tb = new TransactionBuilder();
-            tb.trunkHash = TangleGenerator.getRandomHash();
-            tb.branchHash = TangleGenerator.getRandomHash();
+            tb.trunkHash = Generator.getRandomHash();
+            tb.branchHash = Generator.getRandomHash();
             Transaction t = tb.build();
             tangle.put(t.hash, t);
         }

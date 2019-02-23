@@ -1,13 +1,12 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
-import org.iota.ict.ixi.util.TangleGenerator;
+import org.iota.ict.ixi.util.Generator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.Set;
 
 public class GetPastTest extends AbstractModuleTestTemplate {
@@ -42,15 +41,15 @@ public class GetPastTest extends AbstractModuleTestTemplate {
 
         // random tx
         TransactionBuilder tb4 = new TransactionBuilder();
-        tb4.trunkHash = TangleGenerator.getRandomHash();
-        tb4.branchHash = TangleGenerator.getRandomHash();
+        tb4.trunkHash = Generator.getRandomHash();
+        tb4.branchHash = Generator.getRandomHash();
         Transaction t4 = tb4.build();
         tangle.put(t4.hash, t4);
 
         // random tx
         TransactionBuilder tb5 = new TransactionBuilder();
-        tb5.trunkHash = TangleGenerator.getRandomHash();
-        tb5.branchHash = TangleGenerator.getRandomHash();
+        tb5.trunkHash = Generator.getRandomHash();
+        tb5.branchHash = Generator.getRandomHash();
         Transaction t5 = tb5.build();
         tangle.put(t5.hash, t5);
 
