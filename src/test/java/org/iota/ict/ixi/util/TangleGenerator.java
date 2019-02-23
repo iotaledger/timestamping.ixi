@@ -11,9 +11,9 @@ public class TangleGenerator {
     private static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
     private static SecureRandom r = new SecureRandom();
 
-    public static Map<String, Transaction> createTangle(int size) {
+    public static LinkedHashMap <String, Transaction> createTangle(int size) {
 
-        Map<String, Transaction> tangle = new HashMap<>();
+        LinkedHashMap <String, Transaction> tangle = new LinkedHashMap<>();
 
         Transaction genesis = new TransactionBuilder().build();
         tangle.put(genesis.hash, genesis);

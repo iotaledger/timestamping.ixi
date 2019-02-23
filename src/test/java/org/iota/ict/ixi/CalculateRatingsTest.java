@@ -15,14 +15,8 @@ public class CalculateRatingsTest extends TipSelectionTimestampingTestTemplate {
     @Test
     public void testCalculateChainRating() {
 
-        tangle = TangleGenerator.createTangle(50);
-
-        List<Transaction> tips = TangleGenerator.findTips(tangle);
-
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
-        tb1.trunkHash = tips.get(0).hash;
-        tb1.branchHash = tips.get(1).hash;
         Transaction t1 = tb1.build();
         tangle.put(t1.hash, t1);
 
@@ -51,8 +45,6 @@ public class CalculateRatingsTest extends TipSelectionTimestampingTestTemplate {
     @Test
     public void testCalculateTipRating() {
 
-        tangle = TangleGenerator.createTangle(50);
-
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
         // t1
@@ -70,8 +62,6 @@ public class CalculateRatingsTest extends TipSelectionTimestampingTestTemplate {
 
     @Test
     public void testCalculateTangleRating() {
-
-        tangle = TangleGenerator.createTangle(50);
 
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 

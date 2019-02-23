@@ -7,10 +7,7 @@ import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class GetTimestampsTest extends AbstractModuleTestTemplate {
 
@@ -18,7 +15,7 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
     public void testGetTimestamps() {
 
         List<Long> timestamps = new ArrayList<>();
-        tangle = new HashMap<>();
+        tangle = new LinkedHashMap<>();
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();

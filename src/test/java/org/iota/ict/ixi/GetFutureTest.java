@@ -45,7 +45,6 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction t4 = tb4.build();
         tangle.put(t4.hash, t4);
 
-
         Set<String> future = AbstractTimestampingModule.getFuture(genesis.hash, AbstractTimestampingModule.getPast(genesis.hash, tangle), tangle);
 
         Assert.assertEquals(4, future.size());

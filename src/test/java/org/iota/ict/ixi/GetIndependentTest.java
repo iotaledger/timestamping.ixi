@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class GetIndependentTest extends AbstractModuleTestTemplate {
@@ -15,7 +16,7 @@ public class GetIndependentTest extends AbstractModuleTestTemplate {
     @Test
     public void getIndependentTest() {
 
-        tangle = new HashMap<>();
+        tangle = new LinkedHashMap<>();
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();

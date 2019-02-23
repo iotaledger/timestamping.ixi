@@ -10,12 +10,10 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Set;
 
-public class TipSelectionWalkTest extends TipSelectionTimestampingTestTemplate {
+public class GetPathTest extends TipSelectionTimestampingTestTemplate {
 
     @Test
     public void walkThroughChainTest() {
-
-        tangle = TangleGenerator.createTangle(50);
 
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
@@ -59,11 +57,9 @@ public class TipSelectionWalkTest extends TipSelectionTimestampingTestTemplate {
     @Test
     public void walkThroughTangleTest() {
 
-        tangle = TangleGenerator.createTangle(50);
-
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
-        // t1 - genesis
+        // t1
         TransactionBuilder tb1 = new TransactionBuilder();
         tb1.trunkHash = tips.get(0).hash;
         tb1.branchHash = tips.get(1).hash;
@@ -101,7 +97,10 @@ public class TipSelectionWalkTest extends TipSelectionTimestampingTestTemplate {
         Set<String> path = tipSelectionTimestampingModule.getPath(t1.hash, tangle);
 
         Assert.assertEquals(3, path.size());
-        // path must not contain t2
+
+        // path shall not contain t3
+        Assert.assertEquals(false, path.contains(t3.hash));
+
         Assert.assertEquals(true, path.contains(t2.hash));
         Assert.assertEquals(true, path.contains(t4.hash));
         Assert.assertEquals(true, path.contains(t5.hash));

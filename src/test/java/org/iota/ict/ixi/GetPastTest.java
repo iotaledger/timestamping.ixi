@@ -15,8 +15,6 @@ public class GetPastTest extends AbstractModuleTestTemplate {
     @Test
     public void testTraverseApproved() {
 
-        tangle = new HashMap<>();
-
         // genesis
         Transaction genesis = new TransactionBuilder().build();
         tangle.put(genesis.hash, genesis);

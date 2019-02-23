@@ -1,6 +1,7 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
+import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.model.TipSelectionTimestampingCalculation;
 import org.iota.ict.ixi.util.Generator;
 import org.iota.ict.model.Transaction;
@@ -36,20 +37,14 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         past.retainAll(path);
         future.retainAll(path);
 
-        Map<String, Long> t_minus = new HashMap<>();
-        Map<String, Long> t_plus = new HashMap<>();
+        List<Long> t_minus = getTimestamps(past, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
+        List<Long> t_plus = getTimestamps(future, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
 
-        for(String hash: past)
-            t_minus.put(hash, tangle.get(hash).attachmentTimestampLowerBound);
+        Collections.sort(t_minus);
+        long av = t_minus.get(t_minus.size()-1);
 
-        for(String hash: future)
-            t_plus.put(hash, tangle.get(hash).attachmentTimestampUpperBound);
-
-        Stream<Map.Entry<String, Long>> t_minus_sorted = t_minus.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-        long av = t_minus_sorted.iterator().next().getValue();
-
-        Stream<Map.Entry<String, Long>> t_plus_sorted = t_plus.entrySet().stream().sorted(Map.Entry.comparingByValue());
-        long bv = t_plus_sorted.iterator().next().getValue();
+        Collections.sort(t_plus);
+        long bv = t_plus.get(0);
 
         return new Interval(av, bv);
     }
@@ -60,21 +55,9 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
     }
 
     public Map<String, Integer> calculateRatings(Map<String, Transaction> tangle) {
-
         Map<String, Integer> ratings = new HashMap<>();
-
-        for(String txToInspect: tangle.keySet()) {
-
-            int rating = 1;
-
-            for(String hash: tangle.keySet())
-                if(isReferencing(hash, txToInspect, tangle))
-                    rating++;
-
-            ratings.put(txToInspect, rating);
-
-        }
-
+        for(String txToInspect: tangle.keySet())
+            ratings.put(txToInspect, 1 + getFuture(txToInspect, getPast(txToInspect, tangle), tangle).size());
         return ratings;
     }
 

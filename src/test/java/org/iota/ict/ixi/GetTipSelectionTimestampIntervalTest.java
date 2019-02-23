@@ -8,22 +8,12 @@ import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.List;
 
 public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampingTestTemplate {
 
     @Test
     public void testInterval() {
-
-        tangle = new HashMap<>();
-
-        // t0
-        Transaction genesis = new TransactionBuilder().build();
-        tangle.put(genesis.hash, genesis);
-
-        // continue Tangle
-        TangleGenerator.continueTangle(tangle, 30);
 
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
@@ -36,16 +26,13 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
 
         TangleGenerator.continueTangle(tangle,50);
 
-        Interval time1 = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t1.hash, genesis.hash), tangle);
+        Interval time1 = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t1.hash, genesis), tangle);
 
         Assert.assertTrue(time1.getLowerbound() <= t1.attachmentTimestamp && t1.attachmentTimestamp <= time1.getUpperbound());
     }
 
     @Test
-    public void testChainInterval() {
-
-        // continue Tangle
-        TangleGenerator.continueTangle(tangle, 50);
+    public void testChain() {
 
         List<Transaction> tips = TangleGenerator.findTips(tangle);
 
@@ -91,7 +78,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
 
         Assert.assertTrue(time1.getLowerbound() <= t3.attachmentTimestamp && t3.attachmentTimestamp <= time1.getUpperbound());
         Assert.assertTrue(time2.getLowerbound() <= t4.attachmentTimestamp && t4.attachmentTimestamp <= time2.getUpperbound());
-        
+
     }
 
 }

@@ -12,11 +12,14 @@ import java.util.Map;
 public abstract class AbstractModuleTestTemplate {
 
     protected static Ict ict;
+
     protected Map<String, Transaction> tangle;
+    protected String genesis;
 
     @Before
     public void initializeTangle() {
-        tangle = TangleGenerator.createTangle(15);
+        tangle = TangleGenerator.createTangle(50);
+        genesis = tangle.keySet().iterator().next();
     }
 
     @BeforeClass

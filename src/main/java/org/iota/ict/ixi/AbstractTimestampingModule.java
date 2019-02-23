@@ -74,12 +74,27 @@ public abstract class AbstractTimestampingModule extends IxiModule {
     }
 
     public static Set<String> getFuture(String transactionHash, Set<String> past, Map<String, Transaction> tangle) {
+
         Set<String> ret = new HashSet<>(tangle.keySet());
-        ret.remove(transactionHash);
         ret.removeAll(past);
-        for(String successor: new HashSet<>(ret))
-            if(!isReferencing(successor, transactionHash, tangle))
+        ret.remove(transactionHash);
+
+        Set<String> visited = new HashSet<>();
+        for(String successor: new HashSet<>(ret)) {
+
+            if(visited.contains(successor))
+                continue;
+
+            Set<String> p = getPast(successor, tangle);
+            visited.addAll(p);
+
+            if(!p.contains(transactionHash)) {
                 ret.remove(successor);
+                ret.removeAll(p);
+            }
+
+        }
+
         return ret;
     }
 
@@ -88,13 +103,6 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         ret.removeAll(past);
         ret.removeAll(future);
         return ret;
-    }
-
-    public static boolean isReferencing(String successor, String predecessor, Map<String, Transaction> tangle) {
-        Set<String> past = getPast(successor, tangle);
-        if(past.contains(predecessor))
-            return true;
-        return false;
     }
 
     public static String[] getApproves(String transactionHash, Map<String, Transaction> tangle) {
