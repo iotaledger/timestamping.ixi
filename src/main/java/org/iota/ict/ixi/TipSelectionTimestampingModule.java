@@ -7,7 +7,6 @@ import org.iota.ict.ixi.util.Generator;
 import org.iota.ict.model.Transaction;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
 
@@ -71,21 +70,21 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
 
     private void walk(String current, Set<String> visited, Map<String, Integer> ratings, Map<String, Transaction> tangle) {
 
-        Set<String> approvers = getApprovers(current, getFuture(current, getPast(current, tangle), tangle), tangle);
+        Set<String> past = getPast(current, tangle);
+        Set<String> future = getFuture(current, past, tangle);
+        Set<String> approvers = getApprovers(current, future, tangle);
+
+        if(approvers.size() == 0)
+            return;
+
         Map<String, Integer> ratingsOfApprovers = new HashMap<>();
         for(String approver: approvers)
             ratingsOfApprovers.put(approver, ratings.get(approver));
 
-        Stream<Map.Entry<String,Integer>> sorted = ratingsOfApprovers.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
-        Iterator<Map.Entry<String, Integer>> i = sorted.iterator();
-        if(!i.hasNext())
-            return;
-
-        String tx = i.next().getKey();
+        String tx = ratingsOfApprovers.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).iterator().next().getKey();
         visited.add(tx);
 
         walk(tx, visited, ratings, tangle);
-
 
     }
 

@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampingTestTemplate {
 
@@ -207,6 +206,9 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         TransactionBuilder tb2 = new TransactionBuilder();
         tb2.trunkHash = t1.hash;
         tb2.branchHash = t1.hash;
+        tb2.attachmentTimestampLowerBound = System.currentTimeMillis();
+        tb2.attachmentTimestamp = System.currentTimeMillis();
+        tb2.attachmentTimestampUpperBound = System.currentTimeMillis();
         Transaction t2 = tb2.build();
         tangle.put(t2.hash, t2);
 
@@ -222,28 +224,10 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
 
         TangleGenerator.continueTangle(tangle, 50);
 
-        int marker = 1;
-        for(String hash: TangleGenerator.getTransactionsToApprove(tangle)) {
-            TransactionBuilder tb = new TransactionBuilder();
-            tb.trunkHash = hash;
-            tb.branchHash = hash;
-            tb.attachmentTimestampLowerBound = marker;
-            tb.attachmentTimestamp = marker;
-            tb.attachmentTimestampUpperBound = marker;
-            Transaction t = tb.build();
-            tangle.put(t.hash, t);
-            marker++;
-        }
-
-        Set<String> path = tipSelectionTimestampingModule.getPath(genesis, tangle);
-
-        //for(String hash: path)
-           // System.out.println(tangle.get(hash).attachmentTimestamp);
-
         Interval time = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t2.hash, genesis), tangle);
 
-        Assert.assertTrue(t2.attachmentTimestampLowerBound >= time.getLowerbound());
-        Assert.assertTrue(t2.attachmentTimestampUpperBound <= time.getUpperbound());
+        Assert.assertTrue(time.getLowerbound() <= t2.attachmentTimestampLowerBound);
+        Assert.assertTrue(time.getUpperbound() >= t2.attachmentTimestampUpperBound);
 
     }
 

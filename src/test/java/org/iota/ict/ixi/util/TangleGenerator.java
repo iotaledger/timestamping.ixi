@@ -40,16 +40,7 @@ public class TangleGenerator {
 
     public static String[] getTransactionsToApprove(Map<String, Transaction> tangle) {
 
-        List<Transaction> tips = findTips(tangle);
-
-        Set<String> candidates = new HashSet<>();
-        for(Transaction t: tips) {
-            candidates.add(t.hash);
-            candidates.add(t.trunkHash());
-            candidates.add(t.branchHash());
-        }
-
-        candidates.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+        Set<String> candidates = getAttachmentCandidates(tangle);
 
         String[] ret = new String[2];
 
@@ -70,6 +61,22 @@ public class TangleGenerator {
 
         return ret;
 
+    }
+
+    public static Set<String> getAttachmentCandidates(Map<String, Transaction> tangle) {
+
+        List<Transaction> tips = findTips(tangle);
+
+        Set<String> candidates = new HashSet<>();
+        for(Transaction t: tips) {
+            candidates.add(t.hash);
+            candidates.add(t.trunkHash());
+            candidates.add(t.branchHash());
+        }
+
+        candidates.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+
+        return candidates;
     }
 
     public static List<Transaction> findTips(Map<String, Transaction> tangle) {
