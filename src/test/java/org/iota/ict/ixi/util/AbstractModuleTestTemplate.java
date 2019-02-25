@@ -1,25 +1,23 @@
 package org.iota.ict.ixi.util;
 
 import org.iota.ict.Ict;
-import org.iota.ict.model.Transaction;
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.utils.properties.EditableProperties;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import java.util.Map;
-
 public abstract class AbstractModuleTestTemplate {
 
     protected static Ict ict;
 
-    protected Map<String, Transaction> tangle;
+    protected Tangle tangle;
     protected String genesis;
 
     @Before
     public void initializeTangle() {
-        tangle = TangleGenerator.createTangle(50);
-        genesis = tangle.keySet().iterator().next();
+        tangle = TangleGenerator.createTangle(30);
+        genesis = tangle.getTransactions().keySet().iterator().next();
     }
 
     @BeforeClass

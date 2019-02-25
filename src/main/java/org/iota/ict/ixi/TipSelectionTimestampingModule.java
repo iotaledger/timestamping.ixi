@@ -1,10 +1,10 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.model.TipSelectionTimestampingCalculation;
 import org.iota.ict.ixi.util.Generator;
-import org.iota.ict.model.Transaction;
 
 import java.util.*;
 
@@ -23,7 +23,7 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
     }
 
     @Override
-    public Interval getTimestampInterval(String identifier, Map<String, Transaction> tangle) {
+    public Interval getTimestampInterval(String identifier, Tangle tangle) {
 
         TipSelectionTimestampingCalculation calculation = (TipSelectionTimestampingCalculation) calculations.get(identifier);
         String txToInspect = calculation.getTxToInspect();
@@ -40,10 +40,10 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         List<Long> t_plus = getTimestamps(future, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
 
         Collections.sort(t_minus);
-        long av = t_minus.get(t_minus.size()-1);
+        long av = t_minus.size() > 0 ? t_minus.get(t_minus.size()-1) : 0;
 
         Collections.sort(t_plus);
-        long bv = t_plus.get(0);
+        long bv = t_plus.size() > 0 ? t_plus.get(0) : Long.MAX_VALUE;
 
         return new Interval(av, bv);
     }
@@ -53,38 +53,36 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         return 0;
     }
 
-    public Map<String, Integer> calculateRatings(Map<String, Transaction> tangle) {
+    public Map<String, Integer> calculateRatings(String entry, Tangle tangle) {
         Map<String, Integer> ratings = new HashMap<>();
-        for(String txToInspect: tangle.keySet())
+        for(String txToInspect: getFuture(entry, getPast(entry, tangle), tangle))
             ratings.put(txToInspect, 1 + getFuture(txToInspect, getPast(txToInspect, tangle), tangle).size());
         return ratings;
     }
 
-    public LinkedHashSet<String> getPath(String entry, Map<String, Transaction> tangle) {
-        Map<String, Integer> ratings = calculateRatings(tangle);
-        LinkedHashSet<String> visited = new LinkedHashSet<>();
-        visited.add(entry);
-        walk(entry, visited, ratings, tangle);
-        return visited;
+    public LinkedHashSet<String> getPath(String entry, Tangle tangle) {
+        Map<String, Integer> ratings = calculateRatings(entry, tangle);
+        LinkedHashSet<String> path = new LinkedHashSet<>();
+        walk(entry, path, ratings, tangle);
+        return path;
     }
 
-    private void walk(String current, Set<String> visited, Map<String, Integer> ratings, Map<String, Transaction> tangle) {
+    private void walk(String current, Set<String> path, Map<String, Integer> ratings, Tangle tangle) {
 
-        Set<String> past = getPast(current, tangle);
-        Set<String> future = getFuture(current, past, tangle);
-        Set<String> approvers = getApprovers(current, future, tangle);
+        path.add(current);
 
-        if(approvers.size() == 0)
+        Set<String> approvers = tangle.getDirectApprovers(current);
+
+        if(approvers == null)
             return;
 
         Map<String, Integer> ratingsOfApprovers = new HashMap<>();
         for(String approver: approvers)
             ratingsOfApprovers.put(approver, ratings.get(approver));
 
-        String tx = ratingsOfApprovers.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).iterator().next().getKey();
-        visited.add(tx);
+        String next = ratingsOfApprovers.entrySet().stream().sorted(Collections.reverseOrder(Map.Entry.comparingByValue())).iterator().next().getKey();
 
-        walk(tx, visited, ratings, tangle);
+        walk(next, path, ratings, tangle);
 
     }
 

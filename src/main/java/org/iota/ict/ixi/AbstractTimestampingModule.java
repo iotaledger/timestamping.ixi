@@ -1,6 +1,7 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.model.TimestampingCalculation;
 import org.iota.ict.model.Transaction;
@@ -10,15 +11,14 @@ import java.util.*;
 public abstract class AbstractTimestampingModule extends IxiModule {
 
     protected Map<String, TimestampingCalculation> calculations = new HashMap<>();
-    protected Map<String, Transaction> tangle = new HashMap<>();
+    protected Tangle tangle = new Tangle();
 
     public AbstractTimestampingModule(Ixi ixi) {
 
         super(ixi);
 
         ixi.addGossipListener(event -> {
-            Transaction transaction = event.getTransaction();
-            tangle.put(transaction.hash, transaction);
+            tangle.addTransaction(event.getTransaction());
         });
 
     }
@@ -39,14 +39,14 @@ public abstract class AbstractTimestampingModule extends IxiModule {
             calculation.addTimestampHelper(referringTx);
     }
 
-    public abstract Interval getTimestampInterval(String hash, Map<String, Transaction> tangle);
+    public abstract Interval getTimestampInterval(String hash, Tangle tangle);
 
     public abstract double getTimestampConfidence(String identifier);
 
-    public static List<Long> getTimestamps(Set<String> set, TimestampType timestampType, Map<String, Transaction> tangle) {
+    public static List<Long> getTimestamps(Set<String> set, TimestampType timestampType, Tangle tangle) {
         List<Long> ret = new ArrayList<>();
         for(String hash: set) {
-            Transaction transaction = tangle.get(hash);
+            Transaction transaction = tangle.getTransactions().get(hash);
             if(transaction == null)
                 continue;
             switch (timestampType) {
@@ -67,15 +67,15 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         return ret;
     }
 
-    public static Set<String> getPast(String transactionHash, Map<String, Transaction> tangle) {
+    public static Set<String> getPast(String transactionHash, Tangle tangle) {
         Set<String> ret = new HashSet<>();
         traverseApproved(transactionHash, ret, tangle);
         return ret;
     }
 
-    public static Set<String> getFuture(String transactionHash, Set<String> past, Map<String, Transaction> tangle) {
+    public static Set<String> getFuture(String transactionHash, Set<String> past, Tangle tangle) {
 
-        Set<String> ret = new HashSet<>(tangle.keySet());
+        Set<String> ret = tangle.getTransactions().keySet();
         ret.removeAll(past);
         ret.remove(transactionHash);
 
@@ -98,39 +98,25 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         return ret;
     }
 
-    public static Set<String> getIndependent(Set<String> past, Set<String> future, Map<String, Transaction> tangle) {
-        Set<String> ret = new HashSet<>(tangle.keySet());
+    public static Set<String> getIndependent(Set<String> past, Set<String> future, Tangle tangle) {
+        Set<String> ret = tangle.getTransactions().keySet();
         ret.removeAll(past);
         ret.removeAll(future);
         return ret;
     }
 
-    public static String[] getApproves(String transactionHash, Map<String, Transaction> tangle) {
-        Transaction transaction = tangle.get(transactionHash);
+    public static String[] getApproves(String transactionHash, Tangle tangle) {
+        Transaction transaction = tangle.getTransactions().get(transactionHash);
         if(transaction == null)
             return null;
         return new String[] { transaction.trunkHash(), transaction.branchHash() };
     }
 
-    public static Set<String> getApprovers(String txToInspect, Set<String> future, Map<String, Transaction> tangle) {
-
-        Set<String> approvers = new HashSet<>();
-
-        for(String hash: future) {
-
-            String[] approves = getApproves(hash, tangle);
-
-            if(approves == null)
-                continue;
-
-            if(approves[0].equals(txToInspect) || approves[1].equals(txToInspect))
-                approvers.add(hash);
-        }
-
-        return approvers;
+    public static Set<String> getApprovers(String txToInspect, Tangle tangle) {
+        return tangle.getDirectApprovers(txToInspect);
     }
 
-    private static void traverseApproved(String transactionHash, Set<String> ret, Map<String, Transaction> tangle) {
+    private static void traverseApproved(String transactionHash, Set<String> ret, Tangle tangle) {
 
         String[] approved = getApproves(transactionHash, tangle);
 

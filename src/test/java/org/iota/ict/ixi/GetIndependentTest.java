@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.ixi.util.Generator;
 import org.iota.ict.model.Transaction;
@@ -14,39 +15,39 @@ public class GetIndependentTest extends AbstractModuleTestTemplate {
     @Test
     public void getIndependentTest() {
 
-        tangle.clear();
+        tangle = new Tangle();
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();
-        tangle.put(genesis.hash, genesis);
+        tangle.addTransaction(genesis);
 
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
         tb1.trunkHash = genesis.hash;
         tb1.branchHash = genesis.hash;
         Transaction t1 = tb1.build();
-        tangle.put(t1.hash, t1);
+        tangle.addTransaction(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
         tb2.trunkHash = genesis.hash;
         tb2.branchHash = t1.hash;
         Transaction t2 = tb2.build();
-        tangle.put(t2.hash, t2);
+        tangle.addTransaction(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
         tb3.trunkHash = t1.hash;
         tb3.branchHash = t2.hash;
         Transaction t3 = tb3.build();
-        tangle.put(t3.hash, t3);
+        tangle.addTransaction(t3);
 
         // t4
         TransactionBuilder tb4 = new TransactionBuilder();
         tb4.trunkHash = t3.hash;
         tb4.branchHash = t2.hash;
         Transaction t4 = tb4.build();
-        tangle.put(t4.hash, t4);
+        tangle.addTransaction(t4);
 
         // add 5 independent tx
         for(int i = 0; i < 5; i++) {
@@ -54,7 +55,7 @@ public class GetIndependentTest extends AbstractModuleTestTemplate {
             tb.trunkHash = Generator.getRandomHash();
             tb.branchHash = Generator.getRandomHash();
             Transaction t = tb.build();
-            tangle.put(t.hash, t);
+            tangle.addTransaction(t);
         }
 
         Set<String> past = AbstractTimestampingModule.getPast(t2.hash, tangle);

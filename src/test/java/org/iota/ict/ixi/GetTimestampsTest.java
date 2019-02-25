@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.model.Transaction;
@@ -15,11 +16,11 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
     public void testGetTimestamps() {
 
         List<Long> timestamps = new ArrayList<>();
-        tangle = new LinkedHashMap<>();
+        tangle = new Tangle();
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();
-        tangle.put(genesis.hash, genesis);
+        tangle.addTransaction(genesis);
         timestamps.add(genesis.attachmentTimestamp);
 
         // t1
@@ -30,7 +31,7 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
         tb1.attachmentTimestampUpperBound = 3;
         Transaction t1 = tb1.build();
         timestamps.add(t1.attachmentTimestamp);
-        tangle.put(t1.hash, t1);
+        tangle.addTransaction(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
@@ -40,14 +41,14 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
         tb2.attachmentTimestampUpperBound = 5;
         Transaction t2 = tb2.build();
         timestamps.add(t2.attachmentTimestamp);
-        tangle.put(t2.hash, t2);
+        tangle.addTransaction(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
         tb3.trunkHash = t1.hash;
         tb3.branchHash = t2.hash;
         Transaction t3 = tb3.build();
-        tangle.put(t3.hash, t3);
+        tangle.addTransaction(t3);
 
         Set<String> set = AbstractTimestampingModule.getPast(t3.hash, tangle);
 

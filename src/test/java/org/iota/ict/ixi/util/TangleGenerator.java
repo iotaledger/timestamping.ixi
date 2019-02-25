@@ -1,5 +1,6 @@
 package org.iota.ict.ixi.util;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 
@@ -7,12 +8,12 @@ import java.util.*;
 
 public class TangleGenerator {
 
-    public static LinkedHashMap <String, Transaction> createTangle(int size) {
+    public static Tangle createTangle(int size) {
 
-        LinkedHashMap <String, Transaction> tangle = new LinkedHashMap<>();
+        Tangle tangle = new Tangle();
 
         Transaction genesis = new TransactionBuilder().build();
-        tangle.put(genesis.hash, genesis);
+        tangle.addTransaction(genesis);
 
         continueTangle(tangle, size);
 
@@ -20,7 +21,7 @@ public class TangleGenerator {
 
     }
 
-    public static void continueTangle(Map<String, Transaction> tangle, int size) {
+    public static void continueTangle(Tangle tangle, int size) {
 
         for(int i = 0; i < size; i++) {
 
@@ -32,13 +33,13 @@ public class TangleGenerator {
             builder.attachmentTimestamp = System.currentTimeMillis();
             builder.attachmentTimestampUpperBound = System.currentTimeMillis();
             Transaction transaction = builder.build();
-            tangle.put(transaction.hash, transaction);
+            tangle.addTransaction(transaction);
 
         }
 
     }
 
-    public static String[] getTransactionsToApprove(Map<String, Transaction> tangle) {
+    public static String[] getTransactionsToApprove(Tangle tangle) {
 
         Set<String> candidates = getAttachmentCandidates(tangle);
 
@@ -63,7 +64,7 @@ public class TangleGenerator {
 
     }
 
-    public static Set<String> getAttachmentCandidates(Map<String, Transaction> tangle) {
+    public static Set<String> getAttachmentCandidates(Tangle tangle) {
 
         List<Transaction> tips = findTips(tangle);
 
@@ -79,14 +80,15 @@ public class TangleGenerator {
         return candidates;
     }
 
-    public static List<Transaction> findTips(Map<String, Transaction> tangle) {
+    public static List<Transaction> findTips(Tangle tangle) {
 
         List<Transaction> tips = new ArrayList<>();
 
-        for(Transaction x: tangle.values()) {
+        Map<String, Transaction> transactions = tangle.getTransactions();
+        for(Transaction x: transactions.values()) {
 
             boolean isTip = true;
-            for(Transaction y: tangle.values()) {
+            for(Transaction y: transactions.values()) {
 
                 if(x == y)
                     continue;

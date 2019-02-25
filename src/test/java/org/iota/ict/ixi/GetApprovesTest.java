@@ -22,7 +22,7 @@ public class GetApprovesTest extends AbstractModuleTestTemplate {
         builder.branchHash = branch;
         Transaction transaction = builder.build();
 
-        tangle.put(transaction.hash, transaction);
+        tangle.addTransaction(transaction);
 
         String[] approves = AbstractTimestampingModule.getApproves(transaction.hash, tangle);
 

@@ -27,7 +27,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb1.attachmentTimestamp = 2;
         tb1.attachmentTimestampUpperBound = 3;
         Transaction t1 = tb1.build();
-        tangle.put(t1.hash, t1);
+        tangle.addTransaction(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
@@ -37,7 +37,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb2.attachmentTimestamp = 5;
         tb2.attachmentTimestampUpperBound = 6;
         Transaction t2 = tb2.build();
-        tangle.put(t2.hash, t2);
+        tangle.addTransaction(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
@@ -47,7 +47,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb3.attachmentTimestamp = 8;
         tb3.attachmentTimestampUpperBound = 9;
         Transaction t3 = tb3.build();
-        tangle.put(t3.hash, t3);
+        tangle.addTransaction(t3);
 
         // t4
         TransactionBuilder tb4 = new TransactionBuilder();
@@ -57,7 +57,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb4.attachmentTimestamp = 11;
         tb4.attachmentTimestampUpperBound = 12;
         Transaction t4 = tb4.build();
-        tangle.put(t4.hash, t4);
+        tangle.addTransaction(t4);
 
         // t5
         TransactionBuilder tb5 = new TransactionBuilder();
@@ -67,7 +67,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb5.attachmentTimestamp = 14;
         tb5.attachmentTimestampUpperBound = 15;
         Transaction t5 = tb5.build();
-        tangle.put(t5.hash, t5);
+        tangle.addTransaction(t5);
 
         Interval time = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t3.hash, t1.hash), tangle);
 
@@ -89,7 +89,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb1.attachmentTimestamp = 2;
         tb1.attachmentTimestampUpperBound = 3;
         Transaction t1 = tb1.build();
-        tangle.put(t1.hash, t1);
+        tangle.addTransaction(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
@@ -99,7 +99,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb2.attachmentTimestamp = 5;
         tb2.attachmentTimestampUpperBound = 6;
         Transaction t2 = tb2.build();
-        tangle.put(t2.hash, t2);
+        tangle.addTransaction(t2);
 
         // t3 - shall not walk trough this transaction
         TransactionBuilder tb3 = new TransactionBuilder();
@@ -109,7 +109,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb3.attachmentTimestamp = 8;
         tb3.attachmentTimestampUpperBound = 9;
         Transaction t3 = tb3.build();
-        tangle.put(t3.hash, t3);
+        tangle.addTransaction(t3);
 
         // t4
         TransactionBuilder tb4 = new TransactionBuilder();
@@ -119,7 +119,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb4.attachmentTimestamp = 11;
         tb4.attachmentTimestampUpperBound = 12;
         Transaction t4 = tb4.build();
-        tangle.put(t4.hash, t4);
+        tangle.addTransaction(t4);
 
         // t5
         TransactionBuilder tb5 = new TransactionBuilder();
@@ -129,7 +129,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb5.attachmentTimestamp = 14;
         tb5.attachmentTimestampUpperBound = 15;
         Transaction t5 = tb5.build();
-        tangle.put(t5.hash, t5);
+        tangle.addTransaction(t5);
 
         Interval time1 = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t2.hash, t1.hash), tangle);
         Interval time2 = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t4.hash, t1.hash), tangle);
@@ -161,14 +161,14 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb1.attachmentTimestamp = System.currentTimeMillis();
         tb1.attachmentTimestampUpperBound = System.currentTimeMillis();
         Transaction t1 = tb1.build();
-        tangle.put(t1.hash, t1);
+        tangle.addTransaction(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
         tb2.trunkHash = t1.hash;
         tb2.branchHash = t1.hash;
         Transaction t2 = tb2.build();
-        tangle.put(t2.hash, t2);
+        tangle.addTransaction(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
@@ -178,7 +178,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb3.attachmentTimestamp = System.currentTimeMillis();
         tb3.attachmentTimestampUpperBound = System.currentTimeMillis();
         Transaction t3 = tb3.build();
-        tangle.put(t3.hash, t3);
+        tangle.addTransaction(t3);
 
         Interval time = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t2.hash, genesis), tangle);
 
@@ -200,34 +200,14 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
         tb1.attachmentTimestamp = System.currentTimeMillis();
         tb1.attachmentTimestampUpperBound = System.currentTimeMillis();
         Transaction t1 = tb1.build();
-        tangle.put(t1.hash, t1);
-
-        // t2
-        TransactionBuilder tb2 = new TransactionBuilder();
-        tb2.trunkHash = t1.hash;
-        tb2.branchHash = t1.hash;
-        tb2.attachmentTimestampLowerBound = System.currentTimeMillis();
-        tb2.attachmentTimestamp = System.currentTimeMillis();
-        tb2.attachmentTimestampUpperBound = System.currentTimeMillis();
-        Transaction t2 = tb2.build();
-        tangle.put(t2.hash, t2);
-
-        // t3
-        TransactionBuilder tb3 = new TransactionBuilder();
-        tb3.trunkHash = t2.hash;
-        tb3.branchHash = t2.hash;
-        tb3.attachmentTimestampLowerBound = System.currentTimeMillis();
-        tb3.attachmentTimestamp = System.currentTimeMillis();
-        tb3.attachmentTimestampUpperBound = System.currentTimeMillis();
-        Transaction t3 = tb3.build();
-        tangle.put(t3.hash, t3);
+        tangle.addTransaction(t1);
 
         TangleGenerator.continueTangle(tangle, 50);
 
-        Interval time = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t2.hash, genesis), tangle);
+        Interval time = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t1.hash, genesis), tangle);
 
-        Assert.assertTrue(time.getLowerbound() <= t2.attachmentTimestampLowerBound);
-        Assert.assertTrue(time.getUpperbound() >= t2.attachmentTimestampUpperBound);
+        Assert.assertTrue(time.getLowerbound() <= t1.attachmentTimestampLowerBound);
+        Assert.assertTrue(time.getUpperbound() >= t1.attachmentTimestampUpperBound);
 
     }
 

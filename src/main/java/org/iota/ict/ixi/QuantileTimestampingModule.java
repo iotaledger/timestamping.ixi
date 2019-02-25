@@ -2,9 +2,9 @@ package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.QuantileTimestampingCalculation;
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.util.Generator;
-import org.iota.ict.model.Transaction;
 
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class QuantileTimestampingModule extends AbstractTimestampingModule {
     }
 
     @Override
-    public Interval getTimestampInterval(String identifier, Map<String, Transaction> tangle) {
+    public Interval getTimestampInterval(String identifier, Tangle tangle) {
 
         QuantileTimestampingCalculation calculation = calculations.get(identifier);
         String txToInspect = calculation.getTxToInspect();
