@@ -16,7 +16,7 @@ public abstract class AbstractModuleTestTemplate {
 
     @Before
     public void initializeTangle() {
-        tangle = TangleGenerator.createTangle(30);
+        tangle = TangleGenerator.createTangle(50);
         genesis = tangle.getTransactions().keySet().iterator().next();
     }
 

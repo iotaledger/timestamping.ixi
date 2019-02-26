@@ -13,7 +13,7 @@ public class TangleGenerator {
         Tangle tangle = new Tangle();
 
         Transaction genesis = new TransactionBuilder().build();
-        tangle.addTransaction(genesis);
+        tangle.add(genesis);
 
         continueTangle(tangle, size);
 
@@ -33,7 +33,7 @@ public class TangleGenerator {
             builder.attachmentTimestamp = System.currentTimeMillis();
             builder.attachmentTimestampUpperBound = System.currentTimeMillis();
             Transaction transaction = builder.build();
-            tangle.addTransaction(transaction);
+            tangle.add(transaction);
 
         }
 

@@ -32,7 +32,7 @@ public class QuantileTimestampingModule extends AbstractTimestampingModule {
         double beta = calculation.getBeta();
 
         Set<String> past = getPast(txToInspect, tangle);
-        Set<String> future = getFuture(txToInspect, past, tangle);
+        Set<String> future = getFuture(txToInspect, tangle);
         Set<String> independent = getIndependent(past, future, tangle);
 
         List<Long> lowerBounds = getTimestamps(independent, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);

@@ -18,7 +18,7 @@ public class TangleGeneratorTest extends AbstractModuleTestTemplate {
         Assert.assertEquals(0, TangleGenerator.findTips(tangle).size());
 
         Transaction genesis = new TransactionBuilder().build();
-        tangle.addTransaction(genesis);
+        tangle.add(genesis);
 
         Assert.assertEquals(1, TangleGenerator.findTips(tangle).size());
 
@@ -26,7 +26,7 @@ public class TangleGeneratorTest extends AbstractModuleTestTemplate {
         tb1.trunkHash = genesis.hash;
         tb1.branchHash = genesis.hash;
         Transaction t1 = tb1.build();
-        tangle.addTransaction(t1);
+        tangle.add(t1);
 
         Assert.assertEquals(1, TangleGenerator.findTips(tangle).size());
 
@@ -34,7 +34,7 @@ public class TangleGeneratorTest extends AbstractModuleTestTemplate {
         tb2.trunkHash = genesis.hash;
         tb2.branchHash = t1.hash;
         Transaction t2 = tb2.build();
-        tangle.addTransaction(t2);
+        tangle.add(t2);
 
         Assert.assertEquals(1, TangleGenerator.findTips(tangle).size());
 
@@ -42,7 +42,7 @@ public class TangleGeneratorTest extends AbstractModuleTestTemplate {
         tb3.trunkHash = genesis.hash;
         tb3.branchHash = t1.hash;
         Transaction t3 = tb3.build();
-        tangle.addTransaction(t3);
+        tangle.add(t3);
 
         Assert.assertEquals(2, TangleGenerator.findTips(tangle).size());
 
@@ -50,7 +50,7 @@ public class TangleGeneratorTest extends AbstractModuleTestTemplate {
         tb4.trunkHash = t1.hash;
         tb4.branchHash = t2.hash;
         Transaction t4 = tb4.build();
-        tangle.addTransaction(t4);
+        tangle.add(t4);
 
         Assert.assertEquals(2, TangleGenerator.findTips(tangle).size());
 
@@ -58,7 +58,7 @@ public class TangleGeneratorTest extends AbstractModuleTestTemplate {
         tb5.trunkHash = t4.hash;
         tb5.branchHash = t3.hash;
         Transaction t5 = tb5.build();
-        tangle.addTransaction(t5);
+        tangle.add(t5);
 
         Assert.assertEquals(1, TangleGenerator.findTips(tangle).size());
 

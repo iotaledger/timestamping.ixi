@@ -16,42 +16,42 @@ public class GetPastTest extends AbstractModuleTestTemplate {
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();
-        tangle.addTransaction(genesis);
+        tangle.add(genesis);
 
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
         tb1.trunkHash = genesis.hash;
         tb1.branchHash = genesis.hash;
         Transaction t1 = tb1.build();
-        tangle.addTransaction(t1);
+        tangle.add(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
         tb2.trunkHash = genesis.hash;
         tb2.branchHash = t1.hash;
         Transaction t2 = tb2.build();
-        tangle.addTransaction(t2);
+        tangle.add(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
         tb3.trunkHash = t1.hash;
         tb3.branchHash = t2.hash;
         Transaction t3 = tb3.build();
-        tangle.addTransaction(t3);
+        tangle.add(t3);
 
         // random tx
         TransactionBuilder tb4 = new TransactionBuilder();
         tb4.trunkHash = Generator.getRandomHash();
         tb4.branchHash = Generator.getRandomHash();
         Transaction t4 = tb4.build();
-        tangle.addTransaction(t4);
+        tangle.add(t4);
 
         // random tx
         TransactionBuilder tb5 = new TransactionBuilder();
         tb5.trunkHash = Generator.getRandomHash();
         tb5.branchHash = Generator.getRandomHash();
         Transaction t5 = tb5.build();
-        tangle.addTransaction(t5);
+        tangle.add(t5);
 
 
         Set<String> confirmed = AbstractTimestampingModule.getPast(t3.hash, tangle);

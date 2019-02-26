@@ -19,21 +19,21 @@ public class GetQuantileTimestampIntervalTest extends QuantileTimestampingTestTe
         tb1.trunkHash = tips[0];
         tb1.branchHash = tips[1];
         Transaction t1 = tb1.build();
-        tangle.addTransaction(t1);
+        tangle.add(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
         tb2.trunkHash = t1.hash;
         tb2.branchHash = t1.hash;
         Transaction t2 = tb2.build();
-        tangle.addTransaction(t2);
+        tangle.add(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
         tb3.trunkHash = t2.hash;
         tb3.branchHash = t2.hash;
         Transaction t3 = tb3.build();
-        tangle.addTransaction(t3);
+        tangle.add(t3);
 
         TangleGenerator.continueTangle(tangle,50);
 

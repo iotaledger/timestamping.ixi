@@ -20,7 +20,7 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
 
         // genesis
         Transaction genesis = new TransactionBuilder().build();
-        tangle.addTransaction(genesis);
+        tangle.add(genesis);
         timestamps.add(genesis.attachmentTimestamp);
 
         // t1
@@ -31,7 +31,7 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
         tb1.attachmentTimestampUpperBound = 3;
         Transaction t1 = tb1.build();
         timestamps.add(t1.attachmentTimestamp);
-        tangle.addTransaction(t1);
+        tangle.add(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
@@ -41,14 +41,14 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
         tb2.attachmentTimestampUpperBound = 5;
         Transaction t2 = tb2.build();
         timestamps.add(t2.attachmentTimestamp);
-        tangle.addTransaction(t2);
+        tangle.add(t2);
 
         // t3
         TransactionBuilder tb3 = new TransactionBuilder();
         tb3.trunkHash = t1.hash;
         tb3.branchHash = t2.hash;
         Transaction t3 = tb3.build();
-        tangle.addTransaction(t3);
+        tangle.add(t3);
 
         Set<String> set = AbstractTimestampingModule.getPast(t3.hash, tangle);
 

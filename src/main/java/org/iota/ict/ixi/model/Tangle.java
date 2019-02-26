@@ -9,12 +9,12 @@ public class Tangle {
     private Map<String, Transaction> transactions = new LinkedHashMap<>();
     private Map<String, Set<String>> directApprovers = new HashMap<>();
 
-    public synchronized void addTransaction(Transaction transaction) {
+    public synchronized void add(Transaction transaction) {
         transactions.put(transaction.hash, transaction);
         setDirectApprovers(transaction);
     }
 
-    private synchronized void setDirectApprovers(Transaction transaction) {
+    private void setDirectApprovers(Transaction transaction) {
 
         Set<String> approversOfTrunk = directApprovers.get(transaction.trunkHash());
         Set<String> approversOfBranch = directApprovers.get(transaction.branchHash());
@@ -36,7 +36,7 @@ public class Tangle {
         return new LinkedHashMap<>(transactions);
     }
 
-    public synchronized Set<String> getDirectApprovers(String hash) {
+    public Set<String> getDirectApprovers(String hash) {
         return directApprovers.get(hash);
     }
 

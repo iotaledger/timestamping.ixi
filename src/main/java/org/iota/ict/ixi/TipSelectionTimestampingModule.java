@@ -30,7 +30,7 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         String entry = calculation.getEntry();
 
         Set<String> past = getPast(txToInspect, tangle);
-        Set<String> future = getFuture(txToInspect, past, tangle);
+        Set<String> future = getFuture(txToInspect, tangle);
         Set<String> path = getPath(entry, tangle);
 
         past.retainAll(path);
@@ -55,8 +55,8 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
 
     public Map<String, Integer> calculateRatings(String entry, Tangle tangle) {
         Map<String, Integer> ratings = new HashMap<>();
-        for(String txToInspect: getFuture(entry, getPast(entry, tangle), tangle))
-            ratings.put(txToInspect, 1 + getFuture(txToInspect, getPast(txToInspect, tangle), tangle).size());
+        for(String txToInspect: getFuture(entry, tangle))
+            ratings.put(txToInspect, 1 + getFuture(txToInspect, tangle).size());
         return ratings;
     }
 

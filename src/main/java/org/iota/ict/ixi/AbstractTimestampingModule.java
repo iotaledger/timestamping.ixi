@@ -18,7 +18,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         super(ixi);
 
         ixi.addGossipListener(event -> {
-            tangle.addTransaction(event.getTransaction());
+            tangle.add(event.getTransaction());
         });
 
     }
@@ -73,28 +73,9 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         return ret;
     }
 
-    public static Set<String> getFuture(String transactionHash, Set<String> past, Tangle tangle) {
-
-        Set<String> ret = tangle.getTransactions().keySet();
-        ret.removeAll(past);
-        ret.remove(transactionHash);
-
-        Set<String> visited = new HashSet<>();
-        for(String successor: new HashSet<>(ret)) {
-
-            if(visited.contains(successor))
-                continue;
-
-            Set<String> p = getPast(successor, tangle);
-            visited.addAll(p);
-
-            if(!p.contains(transactionHash)) {
-                ret.remove(successor);
-                ret.removeAll(p);
-            }
-
-        }
-
+    public static Set<String> getFuture(String transactionHash, Tangle tangle) {
+        Set<String> ret = new HashSet<>();
+        traverseApprovers(transactionHash, ret, tangle);
         return ret;
     }
 
@@ -128,6 +109,20 @@ public abstract class AbstractTimestampingModule extends IxiModule {
 
         traverseApproved(approved[0], ret, tangle);
         traverseApproved(approved[1], ret, tangle);
+
+    }
+
+    private static void traverseApprovers(String transactionHash, Set<String> ret, Tangle tangle) {
+
+        Set<String> approvers = tangle.getDirectApprovers(transactionHash);
+
+        if(approvers == null)
+            return;
+
+        ret.addAll(approvers);
+
+        for(String hash: approvers)
+            traverseApprovers(hash, ret, tangle);
 
     }
 

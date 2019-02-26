@@ -22,38 +22,38 @@ public class GetApproversTest extends AbstractModuleTestTemplate {
         tb1.trunkHash = tips.get(0).hash;
         tb1.branchHash = tips.get(1).hash;
         Transaction t1 = tb1.build();
-        tangle.addTransaction(t1);
+        tangle.add(t1);
 
         // t2
         TransactionBuilder tb2 = new TransactionBuilder();
         tb2.trunkHash = t1.hash;
         tb2.branchHash = t1.hash;
         Transaction t2 = tb2.build();
-        tangle.addTransaction(t2);
+        tangle.add(t2);
 
         // t3 - the first which is referencing t2
         TransactionBuilder tb3 = new TransactionBuilder();
         tb3.trunkHash = t2.hash;
         tb3.branchHash = t2.hash;
         Transaction t3 = tb3.build();
-        tangle.addTransaction(t3);
+        tangle.add(t3);
 
         // t4
         TransactionBuilder tb4 = new TransactionBuilder();
         tb4.trunkHash = t3.hash;
         tb4.branchHash = t1.hash;
         Transaction t4 = tb4.build();
-        tangle.addTransaction(t4);
+        tangle.add(t4);
 
         // t5 - the second which is referencing t2
         TransactionBuilder tb5 = new TransactionBuilder();
         tb5.trunkHash = t4.hash;
         tb5.branchHash = t2.hash;
         Transaction t5 = tb5.build();
-        tangle.addTransaction(t5);
+        tangle.add(t5);
 
         Set<String> past = AbstractTimestampingModule.getPast(t2.hash, tangle);
-        Set<String> future = AbstractTimestampingModule.getFuture(t2.hash, past, tangle);
+        Set<String> future = AbstractTimestampingModule.getFuture(t2.hash, tangle);
 
         Set<String> approvers = AbstractTimestampingModule.getApprovers(t2.hash, tangle);
 
