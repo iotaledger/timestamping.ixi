@@ -1,12 +1,12 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
-import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,12 +15,12 @@ public class GetApproversTest extends AbstractModuleTestTemplate {
     @Test
     public void getApproversTest() {
 
-        List<Transaction> tips = TangleGenerator.findTips(tangle);
+        List<String> tips = new ArrayList(tangle.getTips());
 
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
-        tb1.trunkHash = tips.get(0).hash;
-        tb1.branchHash = tips.get(1).hash;
+        tb1.trunkHash = tips.get(0);
+        tb1.branchHash = tips.get(1);
         Transaction t1 = tb1.build();
         tangle.add(t1);
 

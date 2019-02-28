@@ -73,7 +73,7 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
 
         Set<String> approvers = tangle.getDirectApprovers(current);
 
-        if(approvers == null)
+        if(approvers.size() == 0)
             return;
 
         Map<String, Integer> ratingsOfApprovers = new HashMap<>();

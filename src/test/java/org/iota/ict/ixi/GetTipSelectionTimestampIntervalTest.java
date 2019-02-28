@@ -17,12 +17,12 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
     @Test
     public void testChain() {
 
-        List<Transaction> tips = TangleGenerator.findTips(tangle);
+        List<String> tips = new ArrayList(tangle.getTips());
 
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
-        tb1.trunkHash = tips.get(0).hash;
-        tb1.branchHash = tips.get(1).hash;
+        tb1.trunkHash = tips.get(0);
+        tb1.branchHash = tips.get(1);
         tb1.attachmentTimestampLowerBound = 1;
         tb1.attachmentTimestamp = 2;
         tb1.attachmentTimestampUpperBound = 3;
@@ -79,12 +79,12 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
     @Test
     public void testTangle() {
 
-        List<Transaction> tips = TangleGenerator.findTips(tangle);
+        List<String> tips = new ArrayList(tangle.getTips());
 
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
-        tb1.trunkHash = tips.get(0).hash;
-        tb1.branchHash = tips.get(1).hash;
+        tb1.trunkHash = tips.get(0);
+        tb1.branchHash = tips.get(1);
         tb1.attachmentTimestampLowerBound = 1;
         tb1.attachmentTimestamp = 2;
         tb1.attachmentTimestampUpperBound = 3;
@@ -145,7 +145,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
     @Test
     public void startWalkAtGenesisWithFixedTips() {
 
-        List<Transaction> tips = TangleGenerator.findTips(tangle);
+        List<Transaction> tips = new ArrayList(tangle.getTips());
 
         // find most weighted path
         LinkedHashSet<String> path = tipSelectionTimestampingModule.getPath(genesis, tangle);

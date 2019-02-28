@@ -1,5 +1,6 @@
 package org.iota.ict.ixi.model;
 
+import org.iota.ict.ixi.AbstractTimestampingModule;
 import org.iota.ict.model.Transaction;
 
 import java.util.*;
@@ -37,7 +38,23 @@ public class Tangle {
     }
 
     public Set<String> getDirectApprovers(String hash) {
-        return directApprovers.get(hash);
+        Set<String> approvers = directApprovers.get(hash);
+        if(approvers == null)
+            return new HashSet<>();
+        return approvers;
+    }
+
+    public Set<String> getTips() {
+        Set<String> ret = new HashSet<>(transactions.keySet());
+        ret.removeAll(directApprovers.keySet());
+        return ret;
+    }
+
+    public Set<String> getTips(String entry) {
+        Set<String> future = AbstractTimestampingModule.getFuture(entry, this);
+        Set<String> tips = getTips();
+        tips.retainAll(future);
+        return tips;
     }
 
 }

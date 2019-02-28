@@ -66,10 +66,11 @@ public class TangleGenerator {
 
     public static Set<String> getAttachmentCandidates(Tangle tangle) {
 
-        List<Transaction> tips = findTips(tangle);
+        Set<String> tips = tangle.getTips();
 
         Set<String> candidates = new HashSet<>();
-        for(Transaction t: tips) {
+        for(String hash: tips) {
+            Transaction t = tangle.getTransactions().get(hash);
             candidates.add(t.hash);
             candidates.add(t.trunkHash());
             candidates.add(t.branchHash());
@@ -78,35 +79,6 @@ public class TangleGenerator {
         candidates.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
 
         return candidates;
-    }
-
-    public static List<Transaction> findTips(Tangle tangle) {
-
-        List<Transaction> tips = new ArrayList<>();
-
-        Map<String, Transaction> transactions = tangle.getTransactions();
-        for(Transaction x: transactions.values()) {
-
-            boolean isTip = true;
-            for(Transaction y: transactions.values()) {
-
-                if(x == y)
-                    continue;
-
-                if(y.trunkHash().equals(x.hash) || y.branchHash().equals(x.hash)) {
-                    isTip = false;
-                    break;
-                }
-
-            }
-
-            if(isTip)
-                tips.add(x);
-
-        }
-
-        return tips;
-
     }
 
 }

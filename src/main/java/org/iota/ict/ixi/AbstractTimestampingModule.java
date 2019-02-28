@@ -116,7 +116,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
 
         Set<String> approvers = tangle.getDirectApprovers(transactionHash);
 
-        if(approvers == null)
+        if(approvers.size() == 0)
             return;
 
         ret.addAll(approvers);
