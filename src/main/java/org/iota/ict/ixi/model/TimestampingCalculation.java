@@ -18,6 +18,10 @@ public abstract class TimestampingCalculation {
             helper.add(hash);
     }
 
+    public Set<String> getTimestampHelpers() {
+        return helper;
+    }
+
     public String getTxToInspect() {
         return txToInspect;
     }

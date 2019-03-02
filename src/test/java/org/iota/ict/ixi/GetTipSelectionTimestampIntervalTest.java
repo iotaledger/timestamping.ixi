@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.ixi.util.TipSelectionTimestampingTestTemplate;
@@ -15,7 +16,7 @@ import java.util.List;
 public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampingTestTemplate {
 
     @Test
-    public void testChain() {
+    public void testChain() throws InvalidArgumentException {
 
         List<String> tips = new ArrayList(tangle.getTips());
 
@@ -77,7 +78,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
     }
 
     @Test
-    public void testTangle() {
+    public void testTangle() throws InvalidArgumentException {
 
         List<String> tips = new ArrayList(tangle.getTips());
 
@@ -143,7 +144,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
     }
 
     @Test
-    public void startWalkAtGenesisWithFixedTips() {
+    public void startWalkAtGenesisWithFixedTips() throws InvalidArgumentException {
 
         List<Transaction> tips = new ArrayList(tangle.getTips());
 
@@ -188,7 +189,7 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
     }
 
     @Test
-    public void startWalkAtGenesisWithRandomTips() {
+    public void startWalkAtGenesisWithRandomTips() throws InvalidArgumentException {
 
         String[] tips = TangleGenerator.getTransactionsToApprove(tangle);
 

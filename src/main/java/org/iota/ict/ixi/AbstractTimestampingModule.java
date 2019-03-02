@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
@@ -26,7 +27,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
     @Override
     public void run() { ; }
 
-    public abstract String beginTimestampCalculation(String txToInspect, Object... args);
+    public abstract String beginTimestampCalculation(String txToInspect, Object... args) throws InvalidArgumentException;
 
     public void addTimestampHelper(String identifier, String referringTx) {
         TimestampingCalculation calculation = calculations.get(identifier);
@@ -75,7 +76,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
 
     public static Set<String> getFuture(String transactionHash, Tangle tangle) {
         Set<String> ret = new HashSet<>();
-        traverseApprovers(transactionHash, ret, tangle);
+        traverseApprovers(transactionHash, ret, new HashSet<>(), tangle);
         return ret;
     }
 
@@ -107,12 +108,19 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         ret.add(approved[0]);
         ret.add(approved[1]);
 
+        if(ret.contains(transactionHash))
+            return;
+
         traverseApproved(approved[0], ret, tangle);
         traverseApproved(approved[1], ret, tangle);
 
     }
 
-    private static void traverseApprovers(String transactionHash, Set<String> ret, Tangle tangle) {
+    private static void traverseApprovers(String transactionHash, Set<String> ret, Set<String> visited, Tangle tangle) {
+
+        if(visited.contains(transactionHash))
+            return;
+        visited.add(transactionHash);
 
         Set<String> approvers = tangle.getDirectApprovers(transactionHash);
 
@@ -122,7 +130,7 @@ public abstract class AbstractTimestampingModule extends IxiModule {
         ret.addAll(approvers);
 
         for(String hash: approvers)
-            traverseApprovers(hash, ret, tangle);
+            traverseApprovers(hash, ret, visited, tangle);
 
     }
 

@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
@@ -15,9 +16,14 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
     }
 
     @Override
-    public String beginTimestampCalculation(String txToInspect, Object... args) {
+    public String beginTimestampCalculation(String txToInspect, Object... args) throws InvalidArgumentException {
         String identifier = Generator.getRandomHash();
-        String entry = (String) args[0];
+        String entry = null;
+        try {
+            entry = (String) args[0];
+        } catch (Throwable t) {
+            throw new InvalidArgumentException(new String[] { t.getMessage() });
+        }
         calculations.put(identifier, new TipSelectionTimestampingCalculation(txToInspect, entry));
         return identifier;
     }
@@ -32,6 +38,8 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         Set<String> past = getPast(txToInspect, tangle);
         Set<String> future = getFuture(txToInspect, tangle);
         Set<String> path = getPath(entry, tangle);
+
+        path.addAll(calculation.getTimestampHelpers());
 
         past.retainAll(path);
         future.retainAll(path);
@@ -55,7 +63,7 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
 
     public Map<String, Integer> calculateRatings(String entry, Tangle tangle) {
         Map<String, Integer> ratings = new HashMap<>();
-        for(String txToInspect: getFuture(entry, tangle))
+        for (String txToInspect : getFuture(entry, tangle))
             ratings.put(txToInspect, 1 + getFuture(txToInspect, tangle).size());
         return ratings;
     }

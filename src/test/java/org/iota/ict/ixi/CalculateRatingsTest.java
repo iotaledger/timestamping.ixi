@@ -68,9 +68,15 @@ public class CalculateRatingsTest extends TipSelectionTimestampingTestTemplate {
 
         String[] tips = TangleGenerator.getTransactionsToApprove(tangle);
 
+        TransactionBuilder tb0 = new TransactionBuilder();
+        tb0.trunkHash = tips[0];
+        tb0.branchHash = tips[1];
+        Transaction t0 = tb0.build();
+        tangle.add(t0);
+
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
-        tb1.trunkHash = tips[0];
+        tb1.trunkHash = t0.hash;
         tb1.branchHash = tips[1];
         Transaction t1 = tb1.build();
         tangle.add(t1);
@@ -103,7 +109,7 @@ public class CalculateRatingsTest extends TipSelectionTimestampingTestTemplate {
         Transaction t5 = tb5.build();
         tangle.add(t5);
 
-        Map<String, Integer> ratings = tipSelectionTimestampingModule.calculateRatings(genesis, tangle);
+        Map<String, Integer> ratings = tipSelectionTimestampingModule.calculateRatings(t0.hash, tangle);
 
         Assert.assertEquals(5, ratings.get(t1.hash).intValue());
         Assert.assertEquals(4, ratings.get(t2.hash).intValue());

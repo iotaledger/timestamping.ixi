@@ -1,6 +1,7 @@
 package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.model.Tangle;
+import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.ixi.util.TipSelectionTimestampingTestTemplate;
 import org.iota.ict.model.Transaction;
 import org.iota.ict.model.TransactionBuilder;
@@ -72,7 +73,7 @@ public class GetPathTest extends TipSelectionTimestampingTestTemplate {
     @Test
     public void walkThroughSimpleTangleTest() {
 
-        List<String> tips = new ArrayList(tangle.getTips());
+        List<String> tips = new ArrayList<>(TangleGenerator.getAttachmentCandidates(tangle));
 
         // t1
         TransactionBuilder tb1 = new TransactionBuilder();
