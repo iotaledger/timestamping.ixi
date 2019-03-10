@@ -1,6 +1,6 @@
 package org.iota.ict.ixi.model;
 
-import org.iota.ict.ixi.AbstractTimestampingModule;
+import org.iota.ict.ixi.AbstractTimestampingProcedure;
 import org.iota.ict.model.Transaction;
 
 import java.util.*;
@@ -51,7 +51,7 @@ public class Tangle {
     }
 
     public Set<String> getTips(String entry) {
-        Set<String> future = AbstractTimestampingModule.getFuture(entry, this);
+        Set<String> future = AbstractTimestampingProcedure.getFuture(entry, this);
         Set<String> tips = getTips();
         tips.retainAll(future);
         return tips;

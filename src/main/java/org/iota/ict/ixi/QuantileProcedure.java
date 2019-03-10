@@ -9,11 +9,11 @@ import org.iota.ict.ixi.util.Generator;
 
 import java.util.*;
 
-public class QuantileTimestampingModule extends AbstractTimestampingModule {
+public class QuantileProcedure extends AbstractTimestampingProcedure {
 
     private Map<String, QuantileTimestampingCalculation> calculations = new HashMap<>();
 
-    public QuantileTimestampingModule(Ixi ixi) {
+    public QuantileProcedure(Ixi ixi) {
         super(ixi);
     }
 

@@ -1,10 +1,10 @@
 package org.iota.ict.ixi.model;
 
-public class TipSelectionTimestampingCalculation extends TimestampingCalculation {
+public class RandomWalkTimestampingCalculation extends TimestampingCalculation {
 
     private String entry;
 
-    public TipSelectionTimestampingCalculation(String txToInspect, String entry) {
+    public RandomWalkTimestampingCalculation(String txToInspect, String entry) {
         super(txToInspect);
         this.entry = entry;
     }

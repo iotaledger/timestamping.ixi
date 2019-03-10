@@ -12,7 +12,7 @@ public class Main {
 
         Properties properties = new Properties();
         Ict ict = new Ict(properties.toFinal());
-        new TipSelectionTimestampingModule(ict).run();
+        new RandomWalkProcedure(ict).run();
 
     }
 

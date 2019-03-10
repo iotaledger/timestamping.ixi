@@ -45,7 +45,7 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction t4 = tb4.build();
         tangle.add(t4);
 
-        Set<String> future = AbstractTimestampingModule.getFuture(t1.hash, tangle);
+        Set<String> future = AbstractTimestampingProcedure.getFuture(t1.hash, tangle);
 
         Assert.assertEquals(3, future.size());
         Assert.assertEquals(true, future.contains(t2.hash));
@@ -89,7 +89,7 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction t4 = tb4.build();
         tangle.add(t4);
 
-        Set<String> future = AbstractTimestampingModule.getFuture(genesis.hash, tangle);
+        Set<String> future = AbstractTimestampingProcedure.getFuture(genesis.hash, tangle);
 
         Assert.assertEquals(4, future.size());
         Assert.assertEquals(true, future.contains(t1.hash));
@@ -105,7 +105,7 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction tip = new TransactionBuilder().build();
         tangle.add(tip);
 
-        Set<String> future = AbstractTimestampingModule.getFuture(tip.hash, tangle);
+        Set<String> future = AbstractTimestampingProcedure.getFuture(tip.hash, tangle);
         Assert.assertEquals(0, future.size());
 
     }

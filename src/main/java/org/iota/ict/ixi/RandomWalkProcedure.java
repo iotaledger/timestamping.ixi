@@ -4,14 +4,14 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
-import org.iota.ict.ixi.model.TipSelectionTimestampingCalculation;
+import org.iota.ict.ixi.model.RandomWalkTimestampingCalculation;
 import org.iota.ict.ixi.util.Generator;
 
 import java.util.*;
 
-public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
+public class RandomWalkProcedure extends AbstractTimestampingProcedure {
 
-    public TipSelectionTimestampingModule(Ixi ixi) {
+    public RandomWalkProcedure(Ixi ixi) {
         super(ixi);
     }
 
@@ -24,14 +24,14 @@ public class TipSelectionTimestampingModule extends AbstractTimestampingModule {
         } catch (Throwable t) {
             throw new InvalidArgumentException(new String[] { t.getMessage() });
         }
-        calculations.put(identifier, new TipSelectionTimestampingCalculation(txToInspect, entry));
+        calculations.put(identifier, new RandomWalkTimestampingCalculation(txToInspect, entry));
         return identifier;
     }
 
     @Override
     public Interval getTimestampInterval(String identifier, Tangle tangle) {
 
-        TipSelectionTimestampingCalculation calculation = (TipSelectionTimestampingCalculation) calculations.get(identifier);
+        RandomWalkTimestampingCalculation calculation = (RandomWalkTimestampingCalculation) calculations.get(identifier);
         String txToInspect = calculation.getTxToInspect();
         String entry = calculation.getEntry();
 

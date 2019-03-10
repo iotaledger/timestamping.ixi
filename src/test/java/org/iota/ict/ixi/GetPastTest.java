@@ -54,7 +54,7 @@ public class GetPastTest extends AbstractModuleTestTemplate {
         tangle.add(t5);
 
 
-        Set<String> confirmed = AbstractTimestampingModule.getPast(t3.hash, tangle);
+        Set<String> confirmed = AbstractTimestampingProcedure.getPast(t3.hash, tangle);
         confirmed.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
 
         Assert.assertEquals(3, confirmed.size());

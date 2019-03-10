@@ -52,10 +52,10 @@ public class GetApproversTest extends AbstractModuleTestTemplate {
         Transaction t5 = tb5.build();
         tangle.add(t5);
 
-        Set<String> past = AbstractTimestampingModule.getPast(t2.hash, tangle);
-        Set<String> future = AbstractTimestampingModule.getFuture(t2.hash, tangle);
+        Set<String> past = AbstractTimestampingProcedure.getPast(t2.hash, tangle);
+        Set<String> future = AbstractTimestampingProcedure.getFuture(t2.hash, tangle);
 
-        Set<String> approvers = AbstractTimestampingModule.getApprovers(t2.hash, tangle);
+        Set<String> approvers = AbstractTimestampingProcedure.getApprovers(t2.hash, tangle);
 
         Assert.assertEquals(2, approvers.size());
         Assert.assertEquals(true, approvers.contains(t3.hash));

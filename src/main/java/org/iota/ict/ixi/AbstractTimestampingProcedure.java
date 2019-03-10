@@ -9,12 +9,12 @@ import org.iota.ict.model.Transaction;
 
 import java.util.*;
 
-public abstract class AbstractTimestampingModule extends IxiModule {
+public abstract class AbstractTimestampingProcedure extends IxiModule {
 
     protected Map<String, TimestampingCalculation> calculations = new HashMap<>();
     protected Tangle tangle = new Tangle();
 
-    public AbstractTimestampingModule(Ixi ixi) {
+    public AbstractTimestampingProcedure(Ixi ixi) {
 
         super(ixi);
 

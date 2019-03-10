@@ -50,20 +50,20 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
         Transaction t3 = tb3.build();
         tangle.add(t3);
 
-        Set<String> set = AbstractTimestampingModule.getPast(t3.hash, tangle);
+        Set<String> set = AbstractTimestampingProcedure.getPast(t3.hash, tangle);
 
-        List<Long> lowerbounds = AbstractTimestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
+        List<Long> lowerbounds = AbstractTimestampingProcedure.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
         Assert.assertEquals(3, lowerbounds.size());
         Assert.assertEquals(true, lowerbounds.contains(0l));
         Assert.assertEquals(true, lowerbounds.contains(1l));
         Assert.assertEquals(true, lowerbounds.contains(3l));
 
-        List<Long> normal = AbstractTimestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP, tangle);
+        List<Long> normal = AbstractTimestampingProcedure.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP, tangle);
         Assert.assertEquals(3, normal.size());
         Assert.assertEquals(true, normal.contains(timestamps.get(0)));
         Assert.assertEquals(true, normal.contains(timestamps.get(1)));
 
-        List<Long> upperbounds = AbstractTimestampingModule.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
+        List<Long> upperbounds = AbstractTimestampingProcedure.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_UPPERBOUND, tangle);
         Assert.assertEquals(3, upperbounds.size());
         Assert.assertEquals(true, upperbounds.contains(0l));
         Assert.assertEquals(true, upperbounds.contains(3l));

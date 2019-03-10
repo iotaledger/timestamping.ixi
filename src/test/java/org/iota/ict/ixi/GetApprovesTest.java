@@ -24,7 +24,7 @@ public class GetApprovesTest extends AbstractModuleTestTemplate {
 
         tangle.add(transaction);
 
-        String[] approves = AbstractTimestampingModule.getApproves(transaction.hash, tangle);
+        String[] approves = AbstractTimestampingProcedure.getApproves(transaction.hash, tangle);
 
         Assert.assertEquals(trunk, approves[0]);
         Assert.assertEquals(branch, approves[1]);

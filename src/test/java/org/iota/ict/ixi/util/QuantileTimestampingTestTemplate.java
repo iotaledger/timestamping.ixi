@@ -1,9 +1,9 @@
 package org.iota.ict.ixi.util;
 
-import org.iota.ict.ixi.QuantileTimestampingModule;
+import org.iota.ict.ixi.QuantileProcedure;
 
 public class QuantileTimestampingTestTemplate extends AbstractModuleTestTemplate {
 
-    protected static QuantileTimestampingModule quantileTimestampingModule = new QuantileTimestampingModule(ict);
+    protected static QuantileProcedure quantileTimestampingModule = new QuantileProcedure(ict);
 
 }
