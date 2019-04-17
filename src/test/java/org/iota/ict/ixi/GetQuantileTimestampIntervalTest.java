@@ -4,8 +4,8 @@ import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.util.QuantileTimestampingTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
-import org.iota.ict.model.Transaction;
-import org.iota.ict.model.TransactionBuilder;
+import org.iota.ict.model.transaction.Transaction;
+import org.iota.ict.model.transaction.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 

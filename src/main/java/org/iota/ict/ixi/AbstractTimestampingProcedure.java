@@ -1,11 +1,15 @@
 package org.iota.ict.ixi;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
+import org.iota.ict.eee.call.EEEFunction;
+import org.iota.ict.eee.call.FunctionEnvironment;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.model.TimestampingCalculation;
-import org.iota.ict.model.Transaction;
+import org.iota.ict.model.transaction.Transaction;
+import org.iota.ict.network.gossip.GossipEvent;
+import org.iota.ict.network.gossip.GossipListener;
 
 import java.util.*;
 
@@ -14,18 +18,60 @@ public abstract class AbstractTimestampingProcedure extends IxiModule {
     protected Map<String, TimestampingCalculation> calculations = new HashMap<>();
     protected Tangle tangle = new Tangle();
 
+    private final EEEFunction beginTimestampCalculation = new EEEFunction(new FunctionEnvironment("Timestamping.ixi", "beginTimestampCalculation"));
+    private final EEEFunction getTimestampInterval = new EEEFunction(new FunctionEnvironment("Timestamping.ixi", "getTimestampInterval"));
+
     public AbstractTimestampingProcedure(Ixi ixi) {
 
         super(ixi);
 
-        ixi.addGossipListener(event -> {
-            tangle.add(event.getTransaction());
+        ixi.addListener(new GossipListener.Implementation() {
+            @Override
+            public void onReceive(GossipEvent effect) {
+                tangle.add(effect.getTransaction());
+            }
         });
+
+        ixi.addListener(beginTimestampCalculation);
+        ixi.addListener(getTimestampInterval);
 
     }
 
     @Override
-    public void run() { ; }
+    public void run() {
+
+        new Thread(() -> {
+        while (isRunning()) {
+            try {
+                processBeginTimestampCalculationRequest(beginTimestampCalculation.requestQueue.take());
+            } catch (Exception e) {
+                if(isRunning()) throw new RuntimeException(e);
+            }
+        }
+    }).start();
+
+        new Thread(() -> {
+            while (isRunning()) {
+                try {
+                    processGetTimestampIntervalRequest(getTimestampInterval.requestQueue.take());
+                } catch (InterruptedException e) {
+                    if(isRunning()) throw new RuntimeException(e);
+                }
+            }
+        }).start();
+    }
+
+    private void processBeginTimestampCalculationRequest(EEEFunction.Request request) throws InvalidArgumentException {
+        String argument = request.argument;
+        String identifier = beginTimestampCalculation(argument);
+        request.submitReturn(ixi, identifier);
+    }
+
+    private void processGetTimestampIntervalRequest(EEEFunction.Request request) {
+        String identifier = request.argument;
+        Interval ret = getTimestampInterval(identifier, tangle);
+        request.submitReturn(ixi, ret.toString());
+    }
 
     public abstract String beginTimestampCalculation(String txToInspect, Object... args) throws InvalidArgumentException;
 

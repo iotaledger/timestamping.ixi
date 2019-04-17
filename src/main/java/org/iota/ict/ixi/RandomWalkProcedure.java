@@ -1,10 +1,9 @@
 package org.iota.ict.ixi;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
+import org.iota.ict.ixi.model.RandomWalkTimestampingCalculation;
 import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.model.TimestampType;
-import org.iota.ict.ixi.model.RandomWalkTimestampingCalculation;
 import org.iota.ict.ixi.util.Generator;
 
 import java.util.*;
@@ -16,13 +15,14 @@ public class RandomWalkProcedure extends AbstractTimestampingProcedure {
     }
 
     @Override
-    public String beginTimestampCalculation(String txToInspect, Object... args) throws InvalidArgumentException {
+    public String beginTimestampCalculation(String txToInspect, Object... args) throws IllegalArgumentException {
         String identifier = Generator.getRandomHash();
         String entry = null;
         try {
             entry = (String) args[0];
         } catch (Throwable t) {
-            throw new InvalidArgumentException(new String[] { t.getMessage() });
+            throw new IllegalArgumentException( t.getMessage() );
+
         }
         calculations.put(identifier, new RandomWalkTimestampingCalculation(txToInspect, entry));
         return identifier;

@@ -1,7 +1,7 @@
 package org.iota.ict.ixi.model;
 
 import org.iota.ict.ixi.AbstractTimestampingProcedure;
-import org.iota.ict.model.Transaction;
+import org.iota.ict.model.transaction.Transaction;
 
 import java.util.*;
 

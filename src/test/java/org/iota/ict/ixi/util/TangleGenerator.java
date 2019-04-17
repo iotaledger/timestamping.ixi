@@ -1,8 +1,8 @@
 package org.iota.ict.ixi.util;
 
 import org.iota.ict.ixi.model.Tangle;
-import org.iota.ict.model.Transaction;
-import org.iota.ict.model.TransactionBuilder;
+import org.iota.ict.model.transaction.Transaction;
+import org.iota.ict.model.transaction.TransactionBuilder;
 
 import java.util.*;
 

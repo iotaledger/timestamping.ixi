@@ -2,8 +2,8 @@ package org.iota.ict.ixi;
 
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.ixi.util.TipSelectionTimestampingTestTemplate;
-import org.iota.ict.model.Transaction;
-import org.iota.ict.model.TransactionBuilder;
+import org.iota.ict.model.transaction.Transaction;
+import org.iota.ict.model.transaction.TransactionBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
