@@ -1,6 +1,5 @@
 package org.iota.ict.ixi;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.eee.call.EEEFunction;
 import org.iota.ict.eee.call.FunctionEnvironment;
 import org.iota.ict.ixi.model.Interval;
@@ -59,21 +58,25 @@ public abstract class AbstractTimestampingProcedure extends IxiModule {
                 }
             }
         }).start();
+
+        System.out.println("Timestamping.ixi successfully started.");
     }
 
-    private void processBeginTimestampCalculationRequest(EEEFunction.Request request) throws InvalidArgumentException {
-        String argument = request.argument;
-        String identifier = beginTimestampCalculation(argument);
+    private void processBeginTimestampCalculationRequest(EEEFunction.Request request) {
+        String[] arguments = request.argument.split(";");
+        String txToInsepct = arguments[0];
+        String randomWalkEntry = arguments[1];
+        String identifier = beginTimestampCalculation(txToInsepct, randomWalkEntry);
         request.submitReturn(ixi, identifier);
     }
 
     private void processGetTimestampIntervalRequest(EEEFunction.Request request) {
         String identifier = request.argument;
         Interval ret = getTimestampInterval(identifier, tangle);
-        request.submitReturn(ixi, ret.toString());
+        request.submitReturn(ixi, ret.getLowerbound() + ";" + ret.getUpperbound());
     }
 
-    public abstract String beginTimestampCalculation(String txToInspect, Object... args) throws InvalidArgumentException;
+    public abstract String beginTimestampCalculation(String txToInspect, Object... args) throws IllegalArgumentException;
 
     public void addTimestampHelper(String identifier, String referringTx) {
         TimestampingCalculation calculation = calculations.get(identifier);

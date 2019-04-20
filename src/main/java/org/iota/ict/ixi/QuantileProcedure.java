@@ -1,6 +1,5 @@
 package org.iota.ict.ixi;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.iota.ict.ixi.model.Interval;
 import org.iota.ict.ixi.model.QuantileTimestampingCalculation;
 import org.iota.ict.ixi.model.Tangle;
@@ -18,13 +17,13 @@ public class QuantileProcedure extends AbstractTimestampingProcedure {
     }
 
     @Override
-    public String beginTimestampCalculation(String txToInspect, Object... args) throws InvalidArgumentException {
+    public String beginTimestampCalculation(String txToInspect, Object... args) throws IllegalArgumentException {
         String identifier = Generator.getRandomHash();
         double beta;
         try {
             beta = (double) args[0];
         } catch (Throwable t) {
-            throw new InvalidArgumentException(new String[] { t.getMessage() });
+            throw new IllegalArgumentException(t.getMessage());
         }
         calculations.put(identifier, new QuantileTimestampingCalculation(txToInspect, beta));
         return identifier;

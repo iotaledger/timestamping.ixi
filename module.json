@@ -1,0 +1,9 @@
+{
+  "name": "Timestamping.ixi",
+  "main_class": "org.iota.ict.ixi.RandomWalkProcedure",
+  "description": "This module helps us find the honest time interval within a transaction was issued.",
+  "repository": "iotaledger/timestamping.ixi",
+  "gui_port": -1,
+  "supported_versions": ["0.6", "0.7-SNAPSHOT"],
+  "version": "0.1"
+}
