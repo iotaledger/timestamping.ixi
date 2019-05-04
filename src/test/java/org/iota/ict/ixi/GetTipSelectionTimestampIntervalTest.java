@@ -212,4 +212,22 @@ public class GetTipSelectionTimestampIntervalTest extends TipSelectionTimestampi
 
     }
 
+    @Test
+    public void startWalkAtSingleTransaction() throws InvalidArgumentException {
+
+        // t1
+        TransactionBuilder tb1 = new TransactionBuilder();
+        tb1.attachmentTimestampLowerBound = System.currentTimeMillis();
+        tb1.attachmentTimestamp = System.currentTimeMillis();
+        tb1.attachmentTimestampUpperBound = System.currentTimeMillis();
+        Transaction t1 = tb1.build();
+        tangle.add(t1);
+
+        Interval time = tipSelectionTimestampingModule.getTimestampInterval(tipSelectionTimestampingModule.beginTimestampCalculation(t1.hash, t1.hash), tangle);
+
+        Assert.assertTrue(time.getLowerbound() == 0);
+        Assert.assertTrue(time.getUpperbound() == Long.MAX_VALUE);
+
+    }
+
 }
