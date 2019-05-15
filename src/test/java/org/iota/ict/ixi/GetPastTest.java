@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.ixi.util.Generator;
 import org.iota.ict.model.transaction.Transaction;
@@ -54,7 +55,7 @@ public class GetPastTest extends AbstractModuleTestTemplate {
         tangle.add(t5);
 
 
-        Set<String> confirmed = AbstractTimestampingProcedure.getPast(t3.hash, tangle);
+        Set<String> confirmed = Tangle.getPast(t3.hash, tangle);
         confirmed.remove("999999999999999999999999999999999999999999999999999999999999999999999999999999999");
 
         Assert.assertEquals(3, confirmed.size());

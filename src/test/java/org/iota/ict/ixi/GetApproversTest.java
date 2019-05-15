@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.model.transaction.Transaction;
 import org.iota.ict.model.transaction.TransactionBuilder;
@@ -52,10 +53,10 @@ public class GetApproversTest extends AbstractModuleTestTemplate {
         Transaction t5 = tb5.build();
         tangle.add(t5);
 
-        Set<String> past = AbstractTimestampingProcedure.getPast(t2.hash, tangle);
-        Set<String> future = AbstractTimestampingProcedure.getFuture(t2.hash, tangle);
+        Set<String> past = Tangle.getPast(t2.hash, tangle);
+        Set<String> future = Tangle.getFuture(t2.hash, tangle);
 
-        Set<String> approvers = AbstractTimestampingProcedure.getApprovers(t2.hash, tangle);
+        Set<String> approvers = Tangle.getApprovers(t2.hash, tangle);
 
         Assert.assertEquals(2, approvers.size());
         Assert.assertEquals(true, approvers.contains(t3.hash));

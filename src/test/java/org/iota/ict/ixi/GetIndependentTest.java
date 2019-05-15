@@ -58,9 +58,9 @@ public class GetIndependentTest extends AbstractModuleTestTemplate {
             tangle.add(t);
         }
 
-        Set<String> past = AbstractTimestampingProcedure.getPast(t2.hash, tangle);
-        Set<String> future = AbstractTimestampingProcedure.getFuture(t2.hash, tangle);
-        Set<String> independent = AbstractTimestampingProcedure.getIndependent(past, future, tangle);
+        Set<String> past = Tangle.getPast(t2.hash, tangle);
+        Set<String> future = Tangle.getFuture(t2.hash, tangle);
+        Set<String> independent = Tangle.getIndependent(past, future, tangle);
 
         Assert.assertEquals(6, independent.size());
         Assert.assertEquals(false, independent.contains(genesis.hash));

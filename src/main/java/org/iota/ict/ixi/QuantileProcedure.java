@@ -36,9 +36,9 @@ public class QuantileProcedure extends AbstractTimestampingProcedure {
         String txToInspect = calculation.getTxToInspect();
         double beta = calculation.getBeta();
 
-        Set<String> past = getPast(txToInspect, tangle);
-        Set<String> future = getFuture(txToInspect, tangle);
-        Set<String> independent = getIndependent(past, future, tangle);
+        Set<String> past = Tangle.getPast(txToInspect, tangle);
+        Set<String> future = Tangle.getFuture(txToInspect, tangle);
+        Set<String> independent = Tangle.getIndependent(past, future, tangle);
 
         independent.addAll(calculation.getTimestampHelpers());
 

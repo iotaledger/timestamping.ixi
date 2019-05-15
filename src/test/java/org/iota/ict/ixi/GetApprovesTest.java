@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.ixi.util.TangleGenerator;
 import org.iota.ict.model.transaction.Transaction;
@@ -24,7 +25,7 @@ public class GetApprovesTest extends AbstractModuleTestTemplate {
 
         tangle.add(transaction);
 
-        String[] approves = AbstractTimestampingProcedure.getApproves(transaction.hash, tangle);
+        String[] approves = Tangle.getApproves(transaction.hash, tangle);
 
         Assert.assertEquals(trunk, approves[0]);
         Assert.assertEquals(branch, approves[1]);

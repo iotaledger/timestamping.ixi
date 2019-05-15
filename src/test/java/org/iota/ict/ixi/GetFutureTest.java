@@ -1,5 +1,6 @@
 package org.iota.ict.ixi;
 
+import org.iota.ict.ixi.model.Tangle;
 import org.iota.ict.ixi.util.AbstractModuleTestTemplate;
 import org.iota.ict.model.transaction.Transaction;
 import org.iota.ict.model.transaction.TransactionBuilder;
@@ -45,7 +46,7 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction t4 = tb4.build();
         tangle.add(t4);
 
-        Set<String> future = AbstractTimestampingProcedure.getFuture(t1.hash, tangle);
+        Set<String> future = Tangle.getFuture(t1.hash, tangle);
 
         Assert.assertEquals(3, future.size());
         Assert.assertEquals(true, future.contains(t2.hash));
@@ -89,7 +90,7 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction t4 = tb4.build();
         tangle.add(t4);
 
-        Set<String> future = AbstractTimestampingProcedure.getFuture(genesis.hash, tangle);
+        Set<String> future = Tangle.getFuture(genesis.hash, tangle);
 
         Assert.assertEquals(4, future.size());
         Assert.assertEquals(true, future.contains(t1.hash));
@@ -105,7 +106,7 @@ public class GetFutureTest extends AbstractModuleTestTemplate {
         Transaction tip = new TransactionBuilder().build();
         tangle.add(tip);
 
-        Set<String> future = AbstractTimestampingProcedure.getFuture(tip.hash, tangle);
+        Set<String> future = Tangle.getFuture(tip.hash, tangle);
         Assert.assertEquals(0, future.size());
 
     }

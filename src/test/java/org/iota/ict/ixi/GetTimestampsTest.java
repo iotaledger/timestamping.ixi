@@ -50,7 +50,7 @@ public class GetTimestampsTest extends AbstractModuleTestTemplate {
         Transaction t3 = tb3.build();
         tangle.add(t3);
 
-        Set<String> set = AbstractTimestampingProcedure.getPast(t3.hash, tangle);
+        Set<String> set = Tangle.getPast(t3.hash, tangle);
 
         List<Long> lowerbounds = AbstractTimestampingProcedure.getTimestamps(set, TimestampType.ATTACHMENT_TIMESTAMP_LOWERBOUND, tangle);
         Assert.assertEquals(3, lowerbounds.size());

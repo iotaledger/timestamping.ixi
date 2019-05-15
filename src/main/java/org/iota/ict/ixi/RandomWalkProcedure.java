@@ -35,8 +35,8 @@ public class RandomWalkProcedure extends AbstractTimestampingProcedure {
         String txToInspect = calculation.getTxToInspect();
         String entry = calculation.getEntry();
 
-        Set<String> past = getPast(txToInspect, tangle);
-        Set<String> future = getFuture(txToInspect, tangle);
+        Set<String> past = Tangle.getPast(txToInspect, tangle);
+        Set<String> future = Tangle.getFuture(txToInspect, tangle);
         Set<String> path = getPath(entry, tangle);
 
         path.addAll(calculation.getTimestampHelpers());
@@ -63,8 +63,8 @@ public class RandomWalkProcedure extends AbstractTimestampingProcedure {
 
     public Map<String, Integer> calculateRatings(String entry, Tangle tangle) {
         Map<String, Integer> ratings = new HashMap<>();
-        for (String txToInspect : getFuture(entry, tangle))
-            ratings.put(txToInspect, 1 + getFuture(txToInspect, tangle).size());
+        for (String txToInspect : Tangle.getFuture(entry, tangle))
+            ratings.put(txToInspect, 1 + Tangle.getFuture(txToInspect, tangle).size());
         return ratings;
     }
 
