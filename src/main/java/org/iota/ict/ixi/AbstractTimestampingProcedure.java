@@ -9,6 +9,7 @@ import org.iota.ict.ixi.model.TimestampingCalculation;
 import org.iota.ict.model.transaction.Transaction;
 import org.iota.ict.network.gossip.GossipEvent;
 import org.iota.ict.network.gossip.GossipListener;
+import org.iota.ict.network.gossip.GossipPreprocessor;
 
 import java.util.*;
 
@@ -20,24 +21,47 @@ public abstract class AbstractTimestampingProcedure extends IxiModule {
     private final EEEFunction beginTimestampCalculation = new EEEFunction(new FunctionEnvironment("Timestamping.ixi", "beginTimestampCalculation"));
     private final EEEFunction getTimestampInterval = new EEEFunction(new FunctionEnvironment("Timestamping.ixi", "getTimestampInterval"));
 
+    private GossipPreprocessor gossipPreprocessor = new GossipPreprocessor(ixi, -4000);
+
     public AbstractTimestampingProcedure(Ixi ixi) {
 
         super(ixi);
 
-        ixi.addListener(new GossipListener.Implementation() {
-            @Override
-            public void onReceive(GossipEvent effect) {
-                tangle.add(effect.getTransaction());
-            }
-        });
+        //ixi.addListener(new GossipListener.Implementation() {
+           //@Override
+           // public void onReceive(GossipEvent effect) {
+                //tangle.add(effect.getTransaction());
+            //}
+        //});
 
         ixi.addListener(beginTimestampCalculation);
         ixi.addListener(getTimestampInterval);
+
+        ixi.addListener(gossipPreprocessor);
 
     }
 
     @Override
     public void run() {
+
+        new Thread(() -> {
+            try {
+
+                while(isRunning()){
+
+                    GossipEvent effect = gossipPreprocessor.takeEffect();
+                    gossipPreprocessor.passOn(effect);
+
+                    if(effect.isOwnTransaction())
+                        continue;
+
+                    tangle.add(effect.getTransaction());
+
+                }
+            } catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }).start();
 
         new Thread(() -> {
         while (isRunning()) {
@@ -59,7 +83,7 @@ public abstract class AbstractTimestampingProcedure extends IxiModule {
             }
         }).start();
 
-        System.out.println("Timestamping.ixi successfully started.");
+        System.out.println("Timestamping.ixi successfully started!");
     }
 
     private void processBeginTimestampCalculationRequest(EEEFunction.Request request) {

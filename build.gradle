@@ -13,9 +13,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly ('com.github.iotaledger:ict:bd67796a3351080a5eac4e1d41eaa3290b83319a')
-    runtimeClasspath ('com.github.iotaledger:ict:bd67796a3351080a5eac4e1d41eaa3290b83319a')
-    testCompileOnly ('com.github.iotaledger:ict:bd67796a3351080a5eac4e1d41eaa3290b83319a')
+    compileOnly ('com.github.iotaledger:ict:3bb009c3fd0088943ab9b810c69a76097f9fb6ae')
+    runtimeClasspath ('com.github.iotaledger:ict:3bb009c3fd0088943ab9b810c69a76097f9fb6ae')
+    testCompileOnly ('com.github.iotaledger:ict:3bb009c3fd0088943ab9b810c69a76097f9fb6ae')
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
     compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
