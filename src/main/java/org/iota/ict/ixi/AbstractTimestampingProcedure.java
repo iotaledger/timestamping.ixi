@@ -8,7 +8,6 @@ import org.iota.ict.ixi.model.TimestampType;
 import org.iota.ict.ixi.model.TimestampingCalculation;
 import org.iota.ict.model.transaction.Transaction;
 import org.iota.ict.network.gossip.GossipEvent;
-import org.iota.ict.network.gossip.GossipListener;
 import org.iota.ict.network.gossip.GossipPreprocessor;
 
 import java.util.*;
@@ -27,13 +26,6 @@ public abstract class AbstractTimestampingProcedure extends IxiModule {
 
         super(ixi);
 
-        //ixi.addListener(new GossipListener.Implementation() {
-           //@Override
-           // public void onReceive(GossipEvent effect) {
-                //tangle.add(effect.getTransaction());
-            //}
-        //});
-
         ixi.addListener(beginTimestampCalculation);
         ixi.addListener(getTimestampInterval);
 
@@ -51,9 +43,6 @@ public abstract class AbstractTimestampingProcedure extends IxiModule {
 
                     GossipEvent effect = gossipPreprocessor.takeEffect();
                     gossipPreprocessor.passOn(effect);
-
-                    if(effect.isOwnTransaction())
-                        continue;
 
                     tangle.add(effect.getTransaction());
 
